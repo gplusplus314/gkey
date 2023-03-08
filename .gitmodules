@@ -1,0 +1,6 @@
+[submodule "deps/qmk_firmware"]
+	path = deps/qmk_firmware
+	url = https://github.com/qmk/qmk_firmware.git
+[submodule "deps/zmk"]
+	path = deps/zmk
+	url = https://github.com/zmkfirmware/zmk.git

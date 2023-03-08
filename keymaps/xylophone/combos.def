@@ -1,0 +1,21 @@
+//   name      result    chord keys
+// Pinkies Combo:
+COMB(CAPZ,     GK_CAPZ,   KC_A, KC_O)
+// Left Finger Combos:
+COMB(TAB,      GK_TAB,    KC_S, KC_T)
+COMB(LPRN,     GK_LPRN,   KC_S, KC_D)
+COMB(LBRC,     GK_LBRC,   KC_C, KC_D)
+COMB(MINS,     GK_MINS,   KC_R, KC_S)
+COMB(WMPREV,   GK_WMPREV, KC_T, KC_P)
+COMB(LEFT,     GK_LEFT,   KC_F, KC_P)
+// Right Finger Combos
+COMB(QUOT,     GK_QUOT,   KC_S, KC_T)
+COMB(RPRN,     GK_RPRN,   KC_S, KC_D)
+COMB(RBRC,     GK_RBRC,   KC_C, KC_D)
+COMB(EQL,      GK_EQL,    KC_R, KC_S)
+COMB(WMNEXT,   GK_WMNEXT, KC_T, KC_P)
+COMB(RGHT,     GK_RGHT,   KC_F, KC_P)
+// Left Thumb Combos:
+COMB(UNDER,    GK_UNDER,  GK_SPC, GK_ESC)
+// Right Thumb Combos:
+COMB(DEL,      GK_DEL,    GK_ENT, GK_BSPC)

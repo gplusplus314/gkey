@@ -1,0 +1,8 @@
+VIA_ENABLE = no
+LTO_ENABLE = no
+QMK_SETTINGS = no
+TAP_DANCE_ENABLE = no
+COMBO_ENABLE = yes
+KEY_OVERRIDE_ENABLE = yes
+VIALRGB_ENABLE = no
+VPATH += keyboards/gboards
