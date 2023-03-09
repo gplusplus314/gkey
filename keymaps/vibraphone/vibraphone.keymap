@@ -1,0 +1,364 @@
+/*
+ * Copyright (c) 2021 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+
+// Global Settings {{{
+&caps_word {
+    continue-list = <UNDERSCORE MINUS BSPC>;
+};
+
+&sl {
+  release-after-ms = <1000>;
+};
+//}}}
+
+// Layer Indices {{{
+#define L_BASE    0
+#define L_ASALPHA 1
+#define L_GAME1   2
+#define L_GAME2   3
+#define L_NAVSYM  4
+#define L_FN      5
+#define L_WM      6
+#define L_STNGS   7
+#define L_TRANS   8
+
+#define ALPHA_LAYERS L_BASE L_ASALPHA
+//}}}
+
+// High level key definitions {{{
+
+#define AS(keycode) &as LS(keycode) keycode     // Standard Autoshift Macro
+#define AS2(key1, key2) &as key2 key1           // Custom Autoshift Macro
+
+// Autoshifted Brackets
+#define G_LPRN AS2(LS(N9), LS(COMMA))
+#define G_RPRN AS2(LS(N0), LS(DOT))
+#define G_LBKT AS(LBKT)
+#define G_RBKT AS(RBKT)
+
+// Left home row mods {{{
+#define G_A     &lhrm LSHFT        A
+#define G_R     &lhrm LGUI         R
+#define G_S     &lhrm LALT         S
+#define G_T     &lhrm LCTRL        T
+//}}}
+
+// Right home row mods {{{
+#define G_N     &rhrm RCTRL        N
+#define G_E     &rhrm RALT         E
+#define G_I     &rhrm RGUI         I
+#define G_O     &rhrm RSHFT        O
+#define G_F1    &prht RCTRL        F1
+#define G_F2    &prht RALT         F2
+#define G_F3    &prht RGUI         F3
+#define G_F10   &prht RSHFT        F10
+//}}}
+
+// Left thumb {{{
+#define G_SPC     &ght  LCTRL        SPC
+#define G_SPC_R   &ght  LCTRL        LC(SPC)
+#define G_ESC     &ght  LALT         ESC
+#define G_ESC_R   &ght  LALT         LA(ESC)
+#define G_UNDER   &ght  LGUI         UNDER
+#define G_UNDER_R &ght  LA(LCTRL)    LG(SPC)
+//}}}
+
+// Right thumb {{{
+#define G_RET   &glt  L_WM         RET
+#define G_BSPC  &glt  L_NAVSYM     BSPC
+#define G_DEL   &glt  L_FN         DEL
+//}}}
+
+//}}}
+
+/ {
+    /*                   KEY POSITIONS
+    ╭────────────────────────╮  ╭────────────────────────╮
+    │  0   1   2   3   4     │  │      5   6   7   8   9 │
+    │ 10  11  12  13  14     │  │     15  16  17  18  19 │
+    │ 20  21  22  23  24     │  │     25  26  27  28  29 │
+    ╰───────────╮ 30  31  32 │  │ 33  34  35 ╭───────────╯
+                ╰────────────╯  ╰────────────╯            */
+
+    // Combos {{{
+    combos {
+      compatible = "zmk,combos";
+
+      // Combo definition macro {{{
+      #define COMBO(NAME, BINDINGS, KEYPOS, TIMEOUT, LAYERS) \
+      combo_##NAME { \
+        timeout-ms = <TIMEOUT>; \
+        bindings = <BINDINGS>; \
+        key-positions = <KEYPOS>; \
+        layers = <LAYERS>; \
+      };
+      //}}}
+
+      // Intentionally out-of-the-way settings layer.
+      COMBO(settings, &sl L_STNGS, 6 7 8 9, 35, ALPHA_LAYERS)
+
+      // Both pinkies for smart caps
+      COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
+
+      // Fallback shift when autoshift is on
+      COMBO(lshft, &kp LSHFT, 10 11, 35, ALPHA_LAYERS)
+      COMBO(rshft, &kp RSHFT, 18 19, 35, ALPHA_LAYERS)
+
+      // Nudge left/right without switching layers
+      COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
+      COMBO(rarrow, &kp RIGHT, 6 7, 35, ALPHA_LAYERS)
+      
+      // Use most comfortable combo for most frequent non-alpha chars:
+      COMBO(tab, AS(TAB), 12 13, 25, L_NAVSYM ALPHA_LAYERS)
+      COMBO(quote, AS(SQT), 16 17, 25, ALPHA_LAYERS)
+
+      // Put - and = on easy, radially symmetric combos
+      COMBO(minus_l, AS(MINUS), 11 12, 25, L_BASE L_NAVSYM)
+      COMBO(equal_l, AS(EQUAL), 1 2, 25, L_BASE)
+      COMBO(equal_r, AS(EQUAL), 17 18, 25, L_BASE)
+      COMBO(minus_r, AS(MINUS), 7 8, 25, L_BASE L_NAVSYM)
+
+      // Window management: focus prev/next window
+      COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
+      COMBO(nextwin, AS(LG(DOWN)), 6 16, 35, L_BASE)
+
+      // Shortcut to brackets:
+      COMBO(lprn, G_LPRN, 12 23, 35, L_BASE)
+      COMBO(rprn, G_RPRN, 17 26, 35, L_BASE)
+      COMBO(lbkt, G_LBKT, 22 23, 35, L_BASE)
+      COMBO(rbkt, G_RBKT, 26 27, 35, L_BASE)
+
+      // Underscores are super common in programming. This combo makes _
+      // feel like it's basically a "special spacebar" in a way. Typing
+      // in_snake_case_like_this is easy.
+      COMBO(under, G_UNDER, 31 32, 35, L_BASE)
+
+      // On a "[R]aise" layer, left thumb combo acts as gui/gui-spc:
+      COMBO(underr, G_UNDER_R, 31 32, 35, L_NAVSYM L_FN)
+      // TODO: Describe tradeoff between moving thumb slightly vs home row for gui {{{markdown
+/*
+# Thumb
+
+## Pros
+Easy to get used to using the thumb. Low effort, but some special keystrokes
+that are either low frequency or special use. Examples:
+
+```
+  Low Freq: Super+ESC
+  Special Use: Super+SPC
+    - puts the "global" leader on the same thumb position as vim leader
+```
+
+## Cons
+- [ ] *Frequent* thumb movement (even if small)
+- [ ] Needs some, but not difficult precision
+
+# Home Row (ring fingers)
+## Pros
+- [ ] No movement other than the actual keypress
+
+## Cons
+- [ ] Has 6 special cases that are less predictable
+*/
+//}}}
+      COMBO(under_r, G_UNDER_R, 31 32, 35, L_NAVSYM)
+
+      // Just like above, except this feels like an alternative to backspace:
+      COMBO(del, G_DEL, 33 34, 35, L_BASE)
+
+      // Intentionally reachable, but out of the way for hyper/meh.
+      COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
+      COMBO(rmeh, &kp RS(RC(RALT)), 5 15, 35, L_BASE)
+      COMBO(lhyper, &kp LS(LC(LA(LGUI))), 14 24, 35, L_BASE)
+      COMBO(rhyper, &kp RS(RC(RA(RGUI))), 15 25, 35, L_BASE)
+    };
+    //}}}
+
+    // Behaviors {{{
+    behaviors {
+      plht: positional_left_hold_tap {
+        compatible = "zmk,behavior-hold-tap";
+        label = "POSITIONAL_LEFT_HOLD_TAP";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 31 32 34>;
+      };
+
+      prht: positional_right_hold_tap {
+        compatible = "zmk,behavior-hold-tap";
+        label = "POSITIONAL_RIGHT_HOLD_TAP";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 31 32 34>;
+      };
+
+      fhrm: fkey_home_row_mod {
+        compatible = "zmk,behavior-hold-tap";
+        label = "FKEY_HOME_ROW_MOD";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <16 17 18 19 33 34>;
+      };
+
+      lhrm: left_home_row_mod {
+        compatible = "zmk,behavior-hold-tap";
+        label = "LEFT_HOME_ROW_MOD";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 31 32 33 34>;
+      };
+
+      rhrm: right_home_row_mod {
+        compatible = "zmk,behavior-hold-tap";
+        label = "RIGHT_HOME_ROW_MOD";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 31 32 33 34>;
+      };
+
+      ght: gerrys_hold_tap {
+        compatible = "zmk,behavior-hold-tap";
+        label = "HOLD_TAP";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <10 19 31 32 33 34>;
+      };
+
+      glt: gerrys_layer_tap {
+        compatible = "zmk,behavior-hold-tap";
+        label = "LAYER_TAP";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <150>;
+        quick-tap-ms = <150>;
+        bindings = <&mo>, <&kp>;
+      };
+
+      as: auto_shift {
+        compatible = "zmk,behavior-hold-tap";
+        label = "AUTO_SHIFT";
+        #binding-cells = <2>;
+        tapping_term_ms = <150>;
+        quick_tap_ms = <150>;
+        flavor = "tap-preferred";
+        bindings = <&kp>, <&kp>;
+      };
+    };
+    //}}}
+  
+  // Keymap {{{
+	keymap {
+		compatible = "zmk,keymap";
+
+		base_layer {
+			bindings = <
+        &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
+        G_A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &kp M               &kp N            &kp E              &kp I         G_O
+        &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
+                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
+			>;
+		};
+
+		asalpha_layer {
+			bindings = <
+        AS(Q)        AS(W)         AS(F)         AS(P)           AS(B)         /*& &*/     AS(J)               AS(L)            AS(U)              AS(Y)         AS(SEMI)
+        AS(A)        AS(R)         AS(S)         AS(T)           AS(G)         /*& &*/     AS(M)               AS(N)            AS(E)              AS(I)         AS(O)
+        AS(Z)        AS(X)         AS(C)         AS(D)           AS(V)         /*& &*/     AS(K)               AS(H)            AS(COMMA)          AS(DOT)       AS(FSLH)
+                                       &tog L_GAME1  &trans          &trans    /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		game1_layer {
+			bindings = <
+        &kp Q          &kp W         &kp F         &kp P           &kp B         /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &kp A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &glt L_GAME2 Z &kp X         &kp C         &kp D           &kp V         /*& &*/     &trans              &trans           &trans         &trans        &trans 
+                                       &kp LSHFT       &kp SPC         &kp LCTRL /*& &*/ &trans         &trans           &tog L_GAME1                                       
+			>;
+		};
+
+		game2_layer {
+			bindings = <
+        &kp ESC      &kp N6        &kp N5        &kp N4          &kp UP        /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &kp TAB      &kp N3        &kp N2        &kp N1          &kp N0        /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &kp N9        &kp N8        &kp N7          &kp DOWN      /*& &*/     &trans              &trans           &trans         &trans        &trans
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		navsym_layer {
+			bindings = <
+        &trans       &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(LBKT)            AS(N4)           AS(N5)             AS(N6)        AS(DOT)
+        G_A          &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &trans       G_LBKT        G_LPRN       G_RPRN           G_RBKT      /*& &*/     AS(RBKT)            AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+                                       &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		fn_layer {
+			bindings = <
+        &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F13          &kp F4           &kp F5             &kp F6        &kp F11   
+        &kp LALT     &kp LGUI      &kp LCTRL    &kp LSHFT        &trans      /*& &*/     &kp F14          G_F1             G_F2               G_F3          G_F10
+        &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F15          &kp F7           &kp F8             &kp F9        &kp F12
+                                       &trans        G_SPC_R         G_ESC_R /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		wm_layer {
+			bindings = <
+        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     AS(LG(LBKT))       AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RIGHT))
+        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     AS(LG(RBKT))       AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LEFT))
+                                       &trans &ght LSHFT LS(SPC) &ght LCTRL LC(ESC) /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		settings_layer {
+			bindings = <
+        &trans       &trans        &bt BT_SEL 4  &bt BT_SEL 3       &bt BT_CLR    /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &tog L_ASALPHA   &trans         &trans        &trans
+        &trans       &trans        &trans        &trans             &out OUT_USB  /*& &*/     &trans              &trans           &trans         &trans        &trans
+                                       &trans        &trans             &trans    /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+		trans_layer {
+			bindings = <
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
+			>;
+		};
+
+	};
+  //}}}
+
+};
