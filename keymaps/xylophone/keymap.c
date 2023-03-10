@@ -15,47 +15,125 @@ enum G_LAYERS {
 };
 
 enum G_KEYCODES {
-  // Left Thumbs Mod-Taps:
-  GK_SPC = SAFE_RANGE,
-  GK_ESC,
-  // Right Thumbs Layer-Taps:
-  GK_ENT,
-  GK_BSPC,
-  // Pinkies Mod-Taps:
-  GK_A,
-  GK_O,
-  // Pinkies Combo:
-  GK_CAPZ,
-  // Left Finger Combos:
-  GK_TAB,
-  GK_LPRN,
-  GK_LBRC,
-  GK_MINS,
-  GK_WMPREV,
-  GK_LEFT,
-  // Right Finger Combos:
-  GK_QUOT,
+  GK_LPRN = SAFE_RANGE,
   GK_RPRN,
-  GK_RBRC,
-  GK_EQL,
-  GK_WMNEXT,
-  GK_RGHT,
-  // Left Thumb Combos:
-  GK_UNDER,
-  // Right Thumb Combos:
-  GK_DEL
+  GK_SETTINGS,
 };
+
+// Left Thumbs Mod-Taps:
+#define G_SPC    LCTL_T(KC_SPC)
+#define G_ESC    LALT_T(KC_ESC)
+// Right Thumbs Layer-Taps:
+#define G_ENT    LT(GL_WM, KC_ENT)
+#define G_BSPC   LT(GL_NAVSYM, KC_BSPC)
+// Pinkies Mod-Taps:
+#define G_A      LSFT_T(KC_A)
+#define G_O      RSFT_T(KC_O)
+// Pinkies Combo:
+#define G_CAPZ   QK_CAPS_WORD_TOGGLE
+// Left Finger Combos:
+#define G_TAB    KC_TAB
+#define G_LPRN   GK_LPRN
+#define G_LBRC   KC_LBRC
+#define G_MINS   KC_MINS
+#define G_WMPREV G(KC_UP)
+#define G_LEFT   KC_LEFT
+// Right Finger Combos:
+#define G_QUOT   KC_QUOT
+#define G_RPRN   GK_RPRN
+#define G_RBRC   KC_RBRC
+#define G_EQL    KC_EQL
+#define G_WMNEXT G(KC_DOWN)
+#define G_RGHT   KC_RGHT
+// Left Thumb Combos:
+#define G_UNDER  LGUI_T(S(KC_MINS))
+// Right Thumb Combos:
+#define G_DEL    LT(GL_FN, KC_DEL)
+// Left Thumb WM Layer:
+#define G_CTLSPC LCTL_T(C(KC_SPC))
+#define G_ALTESC LALT_T(A(KC_ESC))
+// Left Thumb Combo in Navsym Layer:
+#define G_GUISPC LGUI_T(G(KC_SPC))
 
 #include "g/keymap_combo.h" // combos defined in combos.def
 
+void keyboard_post_init_user(void) { }
+
+uint16_t get_combo_term(uint16_t index, combo_t *combo) {
+  // or with combo index, i.e. its name from enum.
+  switch (index) {
+    case GC_TAB:
+    case GC_QUOT:
+    case GC_MINS:
+    case GC_EQL:
+      return 25;
+      
+    default:
+      return 35;
+  }
+}
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case G_UNDER:
+      return 175;
+    default:
+      return 175;
+  }
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case G_UNDER:
+      if(record->tap.count) {
+        unregister_mods(MOD_BIT(KC_LGUI));
+        tap_code16(S(KC_MINS));
+      }
+      return true;
+
+    case G_GUISPC:
+      if(record->tap.count) {
+        unregister_mods(MOD_BIT(KC_LGUI));
+        tap_code16(G(KC_SPC));
+      }
+      return true;
+
+    case GK_LPRN:
+      if(get_mods() & MOD_MASK_SHIFT) {
+        tap_code16(S(KC_COMM));
+      } else {
+        tap_code16(S(KC_9));
+      }
+
+    case GK_RPRN:
+      if(get_mods() & MOD_MASK_SHIFT) {
+        tap_code16(S(KC_DOT));
+      } else {
+        tap_code16(S(KC_0));
+      }
+
+    case GK_SETTINGS:
+      if (record->event.pressed) {
+        // Do something when pressed
+      } else {
+        // Do something else when release
+      }
+      return false; // Skip all further processing of this key
+
+    default:
+      return true; // Process all other keycodes normally
+  }
+}
+
+// Layers {{{
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [GL_BASE] = LAYOUT_singlearc_number_row(
         _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
         _______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, 
-        _______, GK_A,    KC_R,    KC_S,    KC_T,    KC_G,                              KC_M,    KC_N,    KC_E,    KC_I,    GK_O,    _______, 
+        _______, G_A,     KC_R,    KC_S,    KC_T,    KC_G,                              KC_M,    KC_N,    KC_E,    KC_I,    G_O,     _______, 
         _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, _______, 
-        _______, _______, _______, _______, _______, GK_SPC,  GK_ESC,          GK_ENT,  GK_BSPC, _______, _______, _______, _______, _______
+        _______, _______, _______, _______, _______, G_SPC,   G_ESC,           G_ENT,   G_BSPC,  _______, _______, _______, _______, _______
     ),
 
     [GL_ASALPHA] = LAYOUT_singlearc_number_row(
@@ -69,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [GL_GAME] = LAYOUT_singlearc_number_row(
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_ESC,
         KC_TAB,  _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-        KC_LSFT, KC_A,    _______, _______, _______, _______,                           _______, _______, _______, _______, KC_O,    _______,
+        KC_LSFT, KC_A,    _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
         KC_LSFT, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
         KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_MINS, KC_SPC, KC_LCTL,          _______, _______, _______, _______, _______, _______, _______
     ),
@@ -78,8 +156,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
         _______, _______, KC_HOME, KC_UP,   KC_END,  KC_PGUP,                           KC_LBRC, KC_4,    KC_5,    KC_6,    KC_DOT,  _______,
         _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,                           KC_GRV,  KC_1,    KC_2,    KC_3,    KC_0,    _______,
-        _______, _______, KC_LBRC, GK_LPRN, GK_RPRN, KC_RBRC,                           KC_RBRC, KC_7,    KC_8,    KC_9,    KC_BSLS, _______,
-        _______, _______, _______, _______, _______, GK_SPC,  GK_ESC,          _______, _______, _______, _______, _______, _______, _______
+        _______, _______, KC_LBRC, G_LPRN,  G_RPRN,  KC_RBRC,                           KC_RBRC, KC_7,    KC_8,    KC_9,    KC_BSLS, _______,
+        _______, _______, _______, _______, _______, _______, _______,         _______, _______, _______, _______, _______, _______, _______
     ),
 
     [GL_WM] = LAYOUT_singlearc_number_row(
@@ -87,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, KC_BRID, KC_BRIU, _______,                           G(KC_LBRC), G(KC_4), G(KC_5), G(KC_6), G(KC_RGHT), _______,
         _______, _______, _______, KC_VOLD, KC_VOLU, KC_MUTE,                           G(KC_GRV),  G(KC_1), G(KC_2), G(KC_3), G(KC_0),    _______,
         _______, _______, _______, KC_MPRV, KC_MNXT, KC_MPLY,                           G(KC_RBRC), G(KC_7), G(KC_8), G(KC_9), G(KC_LEFT), _______,
-        _______, _______, _______, _______, _______, _______, _______,         _______, _______,    _______, _______, _______, _______,    _______
+        _______, _______, _______, _______, _______, G_CTLSPC, G_ALTESC,       _______, _______,    _______, _______, _______, _______,    _______
     ),
 
     [GL_FN] = LAYOUT_singlearc_number_row(
@@ -106,3 +184,4 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______,         _______, _______, _______, _______, _______, _______, _______
     )
 };
+// Layers }}}

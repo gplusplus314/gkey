@@ -121,11 +121,9 @@
       COMBO(tab, AS(TAB), 12 13, 25, L_NAVSYM ALPHA_LAYERS)
       COMBO(quote, AS(SQT), 16 17, 25, ALPHA_LAYERS)
 
-      // Put - and = on easy, radially symmetric combos
+      // Put - and = on easy, combos
       COMBO(minus_l, AS(MINUS), 11 12, 25, L_BASE L_NAVSYM)
-      COMBO(equal_l, AS(EQUAL), 1 2, 25, L_BASE)
       COMBO(equal_r, AS(EQUAL), 17 18, 25, L_BASE)
-      COMBO(minus_r, AS(MINUS), 7 8, 25, L_BASE L_NAVSYM)
 
       // Window management: focus prev/next window
       COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
@@ -273,7 +271,7 @@ that are either low frequency or special use. Examples:
     };
     //}}}
   
-  // Keymap {{{
+  // Layers {{{
 	keymap {
 		compatible = "zmk,keymap";
 

@@ -23,7 +23,6 @@ pushd deps/qmk_firmware
 
   set +e
   qmk compile -kb "$KEYBOARD" -km "$KEYMAP"
-  set -e
 
   pushd keyboards
     pushd "$KEYBOARD/keymaps"
@@ -36,3 +35,5 @@ popd
 mkdir -p out
 mv "deps/qmk_firmware/$FW_FILE" "out/$KEYMAP.uf2"
 
+echo "Firmware in: out/$KEYMAP.uf2"
+# TODO: Flash firmware to keyboard
