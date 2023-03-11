@@ -62,19 +62,3 @@ pushd "firmware/zmk/$KEYMAP/config/boards/shields"
   rm "$KEYMAP"
 popd
 
-until [ -d "$MOUNT_POINT" ]
-do
-  sleep 1
-  echo "Waiting for $MOUNT_POINT to be mounted..."
-done
-echo "Flashing..."
-
-cp "out/$KEYMAP.uf2" "$MOUNT_POINT"
-
-until [ ! -d "$MOUNT_POINT" ]
-do
-  sleep 1
-  echo "Waiting for $MOUNT_POINT to be unmounted..."
-done
-
-echo "Done flashing!"
