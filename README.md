@@ -24,9 +24,9 @@ use the Vibraphone keymap as their base layer.
 
 The PCB was designed by [Cyboard](https://www.cyboard.digital/) based on scans
 of my hands and several iterations of printed mockups. The PCB features zero
-diodes and hard-soldered keys for maximum durability. It can be thrown into a
-bag without a case without any worry. The reset buttons and power toggle
-switches are guarded by the PCB to reduce accidintal operation, too.
+diodes and hard-soldered keys for maximum durability. It can be thrown caseless
+into a bag without any worry. The reset buttons and power toggle switches are
+guarded by the PCB to reduce accidental operation, too.
 
 One neat thing about this design is the non-uniform spacing. This is to minimize
 movement effort without cramping fingers too close to each other. Horizontally,
@@ -40,10 +40,12 @@ it was a design goal.
 
 The Vibraphone keymap is actually for 34 keys. The two extra thumb keys are
 intentionally out of the way and are only used for gaming layers. That said,
-gaming is a non-goal with the Vibraphone.
+gaming is a non-goal with the Vibraphone. There will eventually be a revision
+that eliminates these keys.
 
 The Vibraphone is actually based on another custom keyboard I no longer use: the
-Marimba. It's almost identical, except the Marima was a bit larger and non-flat.
+Marimba. It's almost identical, except the Marima was a bit larger, had more
+keys, and wasn't flat.
 
 #### Goals
 - Purple: the best color
@@ -64,7 +66,7 @@ It's called a Xylophone because:
 - It has more keys than a vibraphone.
 - It is *not* flat, unlike a vibraphone.
 
-This is something else. In essence, it's a mostly standard
+This is something entirely different. In essence, it's a mostly standard
 [Cyboard Dactyl Manuform](https://www.cyboard.digital/product-page/Dactyl-Manuform),
 except I customized the position and angle of the thumb arch to be a closer
 analog to the Vibraphone. But, as can be seen in the photo, this is the
@@ -90,3 +92,4 @@ Use cases for the Xylophone:
 - Gaming: Optional zero-latency key resolution
 - Gaming: More buttons reachable from home position without a layer change
 - Experimenting with "bowled" keyboard shape
+- Experimenting with RGB integrations
