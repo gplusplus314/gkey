@@ -6,6 +6,8 @@ if [ "$KEYMAP" == "xylophone" ] ; then
   KEYBOARD="cyboard/dactyl"
   LINK="cyboard"
   FW_FILE="cyboard_dactyl_$KEYMAP.uf2"
+  # TODO: Default this better (assumes macOS)
+  MOUNT_POINT="/Volumes/RPI-RP2"
 else
   echo "unsuppored keymap"
   exit 1
@@ -36,4 +38,20 @@ mkdir -p out
 mv "deps/qmk_firmware/$FW_FILE" "out/$KEYMAP.uf2"
 
 echo "Firmware in: out/$KEYMAP.uf2"
-# TODO: Flash firmware to keyboard
+
+until [ -d "$MOUNT_POINT" ]
+do
+  sleep 1
+  echo "Waiting for $MOUNT_POINT to be mounted..."
+done
+echo "Flashing..."
+
+cp "out/$KEYMAP.uf2" "$MOUNT_POINT"
+
+until [ ! -d "$MOUNT_POINT" ]
+do
+  sleep 1
+  echo "Waiting for $MOUNT_POINT to be unmounted..."
+done
+
+echo "Done flashing!"

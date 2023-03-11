@@ -5,4 +5,5 @@ TAP_DANCE_ENABLE = no
 COMBO_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes
 VIALRGB_ENABLE = no
+AUTO_SHIFT_ENABLE = yes
 VPATH += keyboards/gboards

@@ -11,13 +11,20 @@ enum G_LAYERS {
   GL_NAVSYM,
   GL_WM,
   GL_FN,
+  GL_STNGS,
   GL_TRANS
 };
 
+bool is_in_gaming_context(keyrecord_t *record) {
+  return IS_LAYER_ON(GL_GAME) && record->event.key.col < 7;
+}
+
+// High Level Key Definitions {{{
 enum G_KEYCODES {
   GK_LPRN = SAFE_RANGE,
   GK_RPRN,
   GK_SETTINGS,
+  GK_S_AS // Setting: Alpha Auto Shift
 };
 
 // Left Thumbs Mod-Taps:
@@ -54,11 +61,21 @@ enum G_KEYCODES {
 #define G_ALTESC LALT_T(A(KC_ESC))
 // Left Thumb Combo in Navsym Layer:
 #define G_GUISPC LGUI_T(G(KC_SPC))
+// High Level Key Definitions }}}
 
+// Combo Definitions {{{
 #include "g/keymap_combo.h" // combos defined in combos.def
 
-void keyboard_post_init_user(void) { }
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+  if(is_in_gaming_context(record)) {
+    return false;
+  }
 
+  return layer_state < (1 << GL_GAME);
+}
+// Combo Definitions }}}
+
+// Timing settings {{{
 uint16_t get_combo_term(uint16_t index, combo_t *combo) {
   // or with combo index, i.e. its name from enum.
   switch (index) {
@@ -80,6 +97,26 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     default:
       return 175;
   }
+}
+// Timing settings }}}
+
+// Behavior {{{
+bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
+  if(is_in_gaming_context(record)) {
+    return false;
+  }
+
+  switch (keycode) {
+    case KC_A ... KC_Z:
+      return IS_LAYER_ON(GL_ASALPHA);
+
+    case KC_1 ... KC_0:
+    case KC_TAB:
+    case KC_MINUS ... KC_SLASH:
+    case KC_NONUS_BACKSLASH:
+      return true;
+  }
+  return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -114,26 +151,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case GK_SETTINGS:
       if (record->event.pressed) {
-        // Do something when pressed
+        layer_on(GL_STNGS);
       } else {
         // Do something else when release
       }
       return false; // Skip all further processing of this key
 
+    case GK_S_AS:
+      layer_invert(GL_ASALPHA);
+      layer_off(GL_STNGS);
+      return false;
+
     default:
       return true; // Process all other keycodes normally
   }
 }
+// Behavior }}}
 
 // Layers {{{
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [GL_BASE] = LAYOUT_singlearc_number_row(
-        _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-        _______, KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                              KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, 
-        _______, G_A,     KC_R,    KC_S,    KC_T,    KC_G,                              KC_M,    KC_N,    KC_E,    KC_I,    G_O,     _______, 
-        _______, KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,                              KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, _______, 
-        _______, _______, _______, _______, _______, G_SPC,   G_ESC,           G_ENT,   G_BSPC,  _______, _______, _______, _______, _______
+        _______, _______, _______, _______, _______,     _______,                       _______, _______, _______, _______, _______, _______,
+        _______, KC_Q,    KC_W,    KC_F,    KC_P,        KC_B,                          KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, _______, 
+        _______, G_A,     KC_R,    KC_S,    KC_T,        KC_G,                          KC_M,    KC_N,    KC_E,    KC_I,    G_O,     _______, 
+        _______, KC_Z,    KC_X,    KC_C,    KC_D,        KC_V,                          KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, _______, 
+        _______, _______, _______, _______, TT(GL_GAME), G_SPC,   G_ESC,       G_ENT,   G_BSPC,  _______, _______, _______, _______, _______
     ),
 
     [GL_ASALPHA] = LAYOUT_singlearc_number_row(
@@ -145,11 +188,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [GL_GAME] = LAYOUT_singlearc_number_row(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_ESC,
-        KC_TAB,  _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-        KC_LSFT, KC_A,    _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-        KC_LSFT, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
-        KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_MINS, KC_SPC, KC_LCTL,          _______, _______, _______, _______, _______, _______, _______
+        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,        KC_8,    KC_9,    KC_0,    KC_ESC,
+        KC_TAB,  _______, _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_GRV,
+        KC_LSFT, KC_A,    _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_BSLS,
+        KC_MINS, _______, _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_EQL,
+        KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_LALT, KC_SPC, KC_LCTL,          _______, _______, TT(GL_GAME), KC_HOME, KC_PGDN, KC_PGUP, KC_END
     ),
 
     [GL_NAVSYM] = LAYOUT_singlearc_number_row(
@@ -174,6 +217,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL, _______,                           KC_F13,  RCTL_T(KC_F1), RALT_T(KC_F2), RGUI_T(KC_F3), RSFT_T(KC_F10), _______,
         _______, _______, _______, _______, _______, _______,                           KC_F15,  KC_F7,         KC_F8,         KC_F9,         KC_F12,         _______,
         _______, _______, _______, _______, _______, _______, _______,         _______, _______, _______,       _______,       _______,       _______,        _______
+    ),
+
+    [GL_STNGS] = LAYOUT_singlearc_number_row(
+        _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                           _______, GK_S_AS, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                           _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,         _______, _______, _______, _______, _______, _______, _______
     ),
 
     [GL_TRANS] = LAYOUT_singlearc_number_row(
