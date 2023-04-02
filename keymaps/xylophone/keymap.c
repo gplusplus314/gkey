@@ -237,10 +237,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [GL_GAME] = LAYOUT_singlearc_number_row(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,        KC_8,    KC_9,    KC_0,    KC_ESC,
+        KC_RBRC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                              KC_6,    KC_7,        KC_8,    KC_9,    KC_0,    KC_ESC,
         KC_TAB,  _______, _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_GRV,
         KC_LSFT, KC_A,    _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_BSLS,
-        KC_MINS, _______, _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_EQL,
+        KC_LBRC, _______, _______, _______, _______, _______,                           _______, _______,     _______, _______, _______, KC_EQL,
         KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_LALT, KC_SPC, KC_LCTL,          _______, _______, TT(GL_GAME), KC_HOME, KC_PGDN, KC_PGUP, KC_END
     ),
 
