@@ -1,4 +1,5 @@
-/* Copyright 2023 Cyboard LLC (@Cyboard-DigitalTailor)
+/* Copyright 2023 Gerry Hernandez (@gerryhernandez)
+ * Copyright 2023 Cyboard LLC (@Cyboard-DigitalTailor)
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -23,6 +24,7 @@ bool is_in_gaming_context(keyrecord_t *record) {
 enum G_KEYCODES {
   GK_LPRN = SAFE_RANGE,
   GK_RPRN,
+  GK_UNDER,
   GK_SETTINGS,
   GK_S_AS // Setting: Alpha Auto Shift
 };
@@ -71,7 +73,11 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
     return false;
   }
 
-  return layer_state < (1 << GL_GAME);
+  if(combo_index == GC_UNDER) {
+    return layer_state >> GL_GAME == 0 || IS_LAYER_ON(GL_NAVSYM);
+  }
+
+  return layer_state >> GL_GAME == 0;
 }
 // Combo Definitions }}}
 
@@ -92,8 +98,6 @@ uint16_t get_combo_term(uint16_t index, combo_t *combo) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case G_UNDER:
-      return 175;
     default:
       return 175;
   }
@@ -101,6 +105,35 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 // Timing settings }}}
 
 // Behavior {{{
+// https://docs.qmk.fm/#/feature_auto_shift?id=custom-shifted-values
+void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+    switch(keycode) {
+        case GK_LPRN:
+            tap_code16((!shifted) ? S(KC_9) : S(KC_COMMA));
+            break;
+        case GK_RPRN:
+            tap_code16((!shifted) ? S(KC_0) : S(KC_DOT));
+            break;
+        default:
+            if (shifted) {
+                add_weak_mods(MOD_BIT(KC_LSFT));
+            }
+            // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+            register_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+    }
+}
+
+
+void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t *record) {
+    switch(keycode) {
+        default:
+            // & 0xFF gets the Tap key for Tap Holds, required when using Retro Shift
+            // The IS_RETRO check isn't really necessary here, always using
+            // keycode & 0xFF would be fine.
+            unregister_code16((IS_RETRO(keycode)) ? keycode & 0xFF : keycode);
+    }
+}
+
 bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
   if(is_in_gaming_context(record)) {
     return false;
@@ -114,6 +147,8 @@ bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
     case KC_TAB:
     case KC_MINUS ... KC_SLASH:
     case KC_NONUS_BACKSLASH:
+    case GK_LPRN:
+    case GK_RPRN:
       return true;
   }
   return false;
@@ -122,32 +157,22 @@ bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case G_UNDER:
-      if(record->tap.count) {
-        unregister_mods(MOD_BIT(KC_LGUI));
-        tap_code16(S(KC_MINS));
-      }
-      return true;
-
-    case G_GUISPC:
-      if(record->tap.count) {
-        unregister_mods(MOD_BIT(KC_LGUI));
-        tap_code16(G(KC_SPC));
-      }
-      return true;
-
-    case GK_LPRN:
-      if(get_mods() & MOD_MASK_SHIFT) {
-        tap_code16(S(KC_COMM));
+      if(record->tap.count && record->event.pressed) {
+        if(IS_LAYER_ON(GL_NAVSYM)) {
+          unregister_mods(MOD_BIT(KC_LGUI));
+          tap_code16(G(KC_SPC));
+        } else {
+          unregister_mods(MOD_BIT(KC_LGUI));
+          tap_code16(S(KC_MINS));
+        }
       } else {
-        tap_code16(S(KC_9));
+        if(record->event.pressed) {
+          register_mods(MOD_BIT(KC_LGUI));
+        } else {
+          unregister_mods(MOD_BIT(KC_LGUI));
+        }
       }
-
-    case GK_RPRN:
-      if(get_mods() & MOD_MASK_SHIFT) {
-        tap_code16(S(KC_DOT));
-      } else {
-        tap_code16(S(KC_0));
-      }
+      return false;
 
     case GK_SETTINGS:
       if (record->event.pressed) {
@@ -164,6 +189,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     default:
       return true; // Process all other keycodes normally
+  }
+}
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    //case LT(1, KC_BSPC):
+    //  // Do not select the hold action when another key is tapped.
+    //  return false;
+    default:
+      // Immediately select the hold action when another key is tapped.
+      return true;
+  }
+}
+
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    //case SFT_T(KC_SPC):
+    //  // Force the dual-role key press to be handled as a modifier if any
+    //  // other key was pressed while the mod-tap key is held down.
+    //  return true;
+    default:
+      // Do not force the mod-tap key press to be handled as a modifier
+      // if any other key was pressed while the mod-tap key is held down.
+      return false;
   }
 }
 // Behavior }}}

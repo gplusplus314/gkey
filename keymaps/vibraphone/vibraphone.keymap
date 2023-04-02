@@ -32,6 +32,7 @@
 #define L_TRANS   8
 
 #define ALPHA_LAYERS L_BASE L_ASALPHA
+#define TYPING_LAYERS L_BASE L_ASALPHA L_NAVSYM
 //}}}
 
 // High level key definitions {{{
@@ -44,6 +45,10 @@
 #define G_RPRN AS2(LS(N0), LS(DOT))
 #define G_LBKT AS(LBKT)
 #define G_RBKT AS(RBKT)
+
+// NavSum Customizations
+#define G_A_DOT &lhrm LSHFT        DOT
+#define G_G_COMMA AS2(COMMA, )
 
 // Left home row mods {{{
 #define G_A     &lhrm LSHFT        A
@@ -104,36 +109,38 @@
       //}}}
 
       // Intentionally out-of-the-way settings layer.
-      COMBO(settings, &sl L_STNGS, 6 7 8 9, 35, ALPHA_LAYERS)
+      COMBO(settings, &sl L_STNGS, 6 7 8 9, 35, TYPING_LAYERS)
 
       // Both pinkies for smart caps
       COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
 
       // Fallback shift when autoshift is on
-      COMBO(lshft, &kp LSHFT, 10 11, 35, ALPHA_LAYERS)
-      COMBO(rshft, &kp RSHFT, 18 19, 35, ALPHA_LAYERS)
+      COMBO(lshft, &kp LSHFT, 10 11, 35, L_ASALPHA)
+      COMBO(rshft, &kp RSHFT, 18 19, 35, L_ASALPHA)
 
       // Nudge left/right without switching layers
-      COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
-      COMBO(rarrow, &kp RIGHT, 6 7, 35, ALPHA_LAYERS)
+      //COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
+      //COMBO(rarrow, &kp RIGHT, 6 7, 35, ALPHA_LAYERS)
       
       // Use most comfortable combo for most frequent non-alpha chars:
-      COMBO(tab, AS(TAB), 12 13, 25, L_NAVSYM ALPHA_LAYERS)
-      COMBO(quote, AS(SQT), 16 17, 25, ALPHA_LAYERS)
+      COMBO(tab, AS(TAB), 12 13, 25, TYPING_LAYERS)
+      COMBO(quote, AS(SQT), 16 17, 25, TYPING_LAYERS)
 
       // Put - and = on easy, combos
-      COMBO(minus_l, AS(MINUS), 11 12, 25, L_BASE L_NAVSYM)
-      COMBO(equal_r, AS(EQUAL), 17 18, 25, L_BASE)
+      COMBO(equal_l, AS(EQUAL), 1  2,  25, TYPING_LAYERS)
+      COMBO(minus_l, AS(MINUS), 11 12, 25, TYPING_LAYERS)
+      COMBO(equal_r, AS(EQUAL), 17 18, 25, TYPING_LAYERS)
+      COMBO(minus_r, AS(MINUS), 7  8,  25, TYPING_LAYERS)
 
       // Window management: focus prev/next window
       COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
       COMBO(nextwin, AS(LG(DOWN)), 6 16, 35, L_BASE)
 
       // Shortcut to brackets:
-      COMBO(lprn, G_LPRN, 12 23, 35, L_BASE)
-      COMBO(rprn, G_RPRN, 17 26, 35, L_BASE)
-      COMBO(lbkt, G_LBKT, 22 23, 35, L_BASE)
-      COMBO(rbkt, G_RBKT, 26 27, 35, L_BASE)
+      COMBO(lprn, G_LPRN, 12 23, 35, TYPING_LAYERS)
+      COMBO(rprn, G_RPRN, 17 26, 35, TYPING_LAYERS)
+      COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
+      COMBO(rbkt, G_RBKT, 26 27, 25, TYPING_LAYERS)
 
       // Underscores are super common in programming. This combo makes _
       // feel like it's basically a "special spacebar" in a way. Typing
@@ -168,7 +175,6 @@ that are either low frequency or special use. Examples:
 - [ ] Has 6 special cases that are less predictable
 */
 //}}}
-      COMBO(under_r, G_UNDER_R, 31 32, 35, L_NAVSYM)
 
       // Just like above, except this feels like an alternative to backspace:
       COMBO(del, G_DEL, 33 34, 35, L_BASE)
@@ -178,6 +184,9 @@ that are either low frequency or special use. Examples:
       COMBO(rmeh, &kp RS(RC(RALT)), 5 15, 35, L_BASE)
       COMBO(lhyper, &kp LS(LC(LA(LGUI))), 14 24, 35, L_BASE)
       COMBO(rhyper, &kp RS(RC(RA(RGUI))), 15 25, 35, L_BASE)
+
+      // Get into gaming mode easily, but out of the way:
+      //COMBO(gaming, &tog L_GAME, 30 35, 25, L_BASE)
     };
     //}}}
 
@@ -243,8 +252,8 @@ that are either low frequency or special use. Examples:
         label = "HOLD_TAP";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
+        tapping-term-ms = <125>;
+        quick-tap-ms = <125>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <10 19 31 32 33 34>;
       };
@@ -263,8 +272,8 @@ that are either low frequency or special use. Examples:
         compatible = "zmk,behavior-hold-tap";
         label = "AUTO_SHIFT";
         #binding-cells = <2>;
-        tapping_term_ms = <150>;
-        quick_tap_ms = <150>;
+        tapping_term_ms = <125>;
+        quick_tap_ms = <125>;
         flavor = "tap-preferred";
         bindings = <&kp>, <&kp>;
       };
@@ -280,7 +289,7 @@ that are either low frequency or special use. Examples:
         &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
         G_A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &kp M               &kp N            &kp E              &kp I         G_O
         &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
+                                       &trans        G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
 			>;
 		};
 
@@ -313,9 +322,9 @@ that are either low frequency or special use. Examples:
 
 		navsym_layer {
 			bindings = <
-        &trans       &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(LBKT)            AS(N4)           AS(N5)             AS(N6)        AS(DOT)
-        G_A          &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &trans       G_LBKT        G_LPRN       G_RPRN           G_RBKT      /*& &*/     AS(RBKT)            AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+        AS(GRAVE)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     &trans              AS(N4)           AS(N5)             AS(N6)        &trans
+        G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(EQUAL)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &kp COMMA    G_LBKT        G_LPRN       G_RPRN           G_RBKT      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
 			>;
 		};
@@ -331,9 +340,9 @@ that are either low frequency or special use. Examples:
 
 		wm_layer {
 			bindings = <
-        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     AS(LG(LBKT))       AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RIGHT))
-        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     AS(LG(RBKT))       AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LEFT))
+        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     AS(LG(GRAVE))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RIGHT))
+        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     AS(LG(EQUAL))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LEFT))
                                        &trans &ght LSHFT LS(SPC) &ght LCTRL LC(ESC) /*& &*/ &trans         &trans           &trans
 			>;
 		};

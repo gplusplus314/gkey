@@ -23,6 +23,7 @@ pushd deps/qmk_firmware
 
   set +e
   qmk compile -kb "$KEYBOARD" -km "$KEYMAP"
+  STATUS="$?"
 
   pushd keyboards
     pushd "$KEYBOARD/keymaps"
@@ -34,3 +35,5 @@ popd
 
 mkdir -p out
 mv "deps/qmk_firmware/$FW_FILE" "out/$KEYMAP.uf2"
+
+exit "$STATUS"

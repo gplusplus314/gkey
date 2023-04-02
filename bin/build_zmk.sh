@@ -51,6 +51,7 @@ pushd deps/zmk/app
   set +e
   west build -d build/left -b "$BOARD" -- -DSHIELD=${KEYMAP}_left \
     -DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
+  STATUS="$?"
   set -e
 popd
 
@@ -62,3 +63,4 @@ pushd "firmware/zmk/$KEYMAP/config/boards/shields"
   rm "$KEYMAP"
 popd
 
+exit "$STATUS"
