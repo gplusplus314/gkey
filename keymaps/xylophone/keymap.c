@@ -54,10 +54,11 @@ enum G_KEYCODES {
 #define G_EQL    KC_EQL
 #define G_WMNEXT G(KC_DOWN)
 #define G_RGHT   KC_RGHT
+#define G_DEL    KC_DEL
 // Left Thumb Combos:
-#define G_UNDER  LGUI_T(S(KC_MINS))
+#define G_LGUI   KC_LGUI
 // Right Thumb Combos:
-#define G_DEL    LT(GL_FN, KC_DEL)
+#define G_FN     MO(GL_FN)
 // Left Thumb WM Layer:
 #define G_CTLSPC LCTL_T(C(KC_SPC))
 #define G_ALTESC LALT_T(A(KC_ESC))
@@ -73,7 +74,7 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
     return false;
   }
 
-  if(combo_index == GC_UNDER) {
+  if(combo_index == GC_LGUI) {
     return layer_state >> GL_GAME == 0 || IS_LAYER_ON(GL_NAVSYM);
   }
 
@@ -156,23 +157,24 @@ bool get_auto_shifted_key(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case G_UNDER:
-      if(record->tap.count && record->event.pressed) {
-        if(IS_LAYER_ON(GL_NAVSYM)) {
-          unregister_mods(MOD_BIT(KC_LGUI));
-          tap_code16(G(KC_SPC));
-        } else {
-          unregister_mods(MOD_BIT(KC_LGUI));
-          tap_code16(S(KC_MINS));
-        }
-      } else {
-        if(record->event.pressed) {
-          register_mods(MOD_BIT(KC_LGUI));
-        } else {
-          unregister_mods(MOD_BIT(KC_LGUI));
-        }
-      }
-      return false;
+    // Example of complex multifunction key:
+    //case G_UNDER:
+    //  if(record->tap.count && record->event.pressed) {
+    //    if(IS_LAYER_ON(GL_NAVSYM)) {
+    //      unregister_mods(MOD_BIT(KC_LGUI));
+    //      tap_code16(G(KC_SPC));
+    //    } else {
+    //      unregister_mods(MOD_BIT(KC_LGUI));
+    //      tap_code16(S(KC_MINS));
+    //    }
+    //  } else {
+    //    if(record->event.pressed) {
+    //      register_mods(MOD_BIT(KC_LGUI));
+    //    } else {
+    //      unregister_mods(MOD_BIT(KC_LGUI));
+    //    }
+    //  }
+    //  return false;
 
     case GK_SETTINGS:
       if (record->event.pressed) {

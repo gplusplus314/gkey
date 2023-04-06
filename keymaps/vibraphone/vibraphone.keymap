@@ -73,8 +73,7 @@
 #define G_SPC_R   &ght  LCTRL        LC(SPC)
 #define G_ESC     &ght  LALT         ESC
 #define G_ESC_R   &ght  LALT         LA(ESC)
-#define G_UNDER   &ght  LGUI         UNDER
-#define G_UNDER_R &ght  LA(LCTRL)    LG(SPC)
+#define G_GUISPC  &ght  LA(LCTRL)    LG(SPC)
 //}}}
 
 // Right thumb {{{
@@ -142,13 +141,8 @@
       COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
       COMBO(rbkt, G_RBKT, 26 27, 25, TYPING_LAYERS)
 
-      // Underscores are super common in programming. This combo makes _
-      // feel like it's basically a "special spacebar" in a way. Typing
-      // in_snake_case_like_this is easy.
-      COMBO(under, G_UNDER, 31 32, 35, L_BASE)
-
-      // On a "[R]aise" layer, left thumb combo acts as gui/gui-spc:
-      COMBO(underr, G_UNDER_R, 31 32, 35, L_NAVSYM L_FN)
+      // On a "[R]aise" layer, left thumb combo acts as ctrl-alt/gui-spc:
+      COMBO(underr, G_GUISPC, 31 32, 35, L_NAVSYM L_FN)
       // TODO: Describe tradeoff between moving thumb slightly vs home row for gui {{{markdown
 /*
 # Thumb
@@ -176,8 +170,8 @@ that are either low frequency or special use. Examples:
 */
 //}}}
 
-      // Just like above, except this feels like an alternative to backspace:
-      COMBO(del, G_DEL, 33 34, 35, L_BASE)
+      // Forward delete on easy-ish combo:
+      COMBO(del, G_DEL, 27 28, 35, L_BASE)
 
       // Intentionally reachable, but out of the way for hyper/meh.
       COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)

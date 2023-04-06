@@ -15,8 +15,9 @@ COMB(GC_RBRC,     G_RBRC,   KC_H, KC_COMMA)
 COMB(GC_EQL,      G_EQL,    KC_E, KC_I)
 COMB(GC_WMNEXT,   G_WMNEXT, KC_N, KC_L)
 COMB(GC_RGHT,     G_RGHT,   KC_L, KC_U)
+COMB(GC_DEL,      G_DEL,    KC_COMMA, KC_DOT)
 // Left Thumb Combos:
-COMB(GC_UNDER,    G_UNDER,  G_SPC, G_ESC)
+COMB(GC_LGUI,     G_LGUI,   G_SPC, G_ESC)
 //COMB(GC_GUISPC,   G_GUISPC, G_SPC, G_ESC)
 // Right Thumb Combos:
-COMB(GC_DEL,      G_DEL,    G_ENT, G_BSPC)
+COMB(GC_FN,       G_FN,     G_ENT, G_BSPC)
