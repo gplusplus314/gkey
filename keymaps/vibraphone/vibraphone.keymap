@@ -32,7 +32,9 @@
 #define L_TRANS   8
 
 #define ALPHA_LAYERS L_BASE L_ASALPHA
-#define TYPING_LAYERS L_BASE L_ASALPHA L_NAVSYM
+#define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM
+#define GAMING_LAYERS L_GAME1 L_GAME2
+#define RIGHT_HAND_LAYERS TYPING_LAYERS GAMING_LAYERS
 //}}}
 
 // High level key definitions {{{
@@ -92,6 +94,11 @@
     │ 20  21  22  23  24     │  │     25  26  27  28  29 │
     ╰───────────╮ 30  31  32 │  │ 33  34  35 ╭───────────╯
                 ╰────────────╯  ╰────────────╯            */
+    #define KEYS_LFINGERS 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
+    #define KEYS_RFINGERS 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
+    #define KEYS_LTHUMBS 30 37 32
+    #define KEYS_RTHUMBS 33 34 35
+    #define KEYS_THUMBS KEYS_LTHUMBS KEYS_RTHUMBS
 
     // Combos {{{
     combos {
@@ -119,17 +126,16 @@
 
       // Nudge left/right without switching layers
       //COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
-      //COMBO(rarrow, &kp RIGHT, 6 7, 35, ALPHA_LAYERS)
+      //COMBO(rarrow, &kp RIGHT, 6 7, 35, RIGHT_HAND_LAYERS)
       
       // Use most comfortable combo for most frequent non-alpha chars:
       COMBO(tab, AS(TAB), 12 13, 25, TYPING_LAYERS)
-      COMBO(quote, AS(SQT), 16 17, 25, TYPING_LAYERS)
+      COMBO(quote, AS(SQT), 16 17, 25, RIGHT_HAND_LAYERS)
 
       // Put - and = on easy, combos
-      COMBO(equal_l, AS(EQUAL), 1  2,  25, TYPING_LAYERS)
       COMBO(minus_l, AS(MINUS), 11 12, 25, TYPING_LAYERS)
-      COMBO(equal_r, AS(EQUAL), 17 18, 25, TYPING_LAYERS)
-      COMBO(minus_r, AS(MINUS), 7  8,  25, TYPING_LAYERS)
+      COMBO(equal_r, AS(EQUAL), 17 18, 25, RIGHT_HAND_LAYERS)
+      COMBO(minus_r, AS(MINUS), 7  8,  25, RIGHT_HAND_LAYERS)
 
       // Window management: focus prev/next window
       COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
@@ -137,9 +143,9 @@
 
       // Shortcut to brackets:
       COMBO(lprn, G_LPRN, 12 23, 35, TYPING_LAYERS)
-      COMBO(rprn, G_RPRN, 17 26, 35, TYPING_LAYERS)
+      COMBO(rprn, G_RPRN, 17 26, 35, RIGHT_HAND_LAYERS)
       COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
-      COMBO(rbkt, G_RBKT, 26 27, 25, TYPING_LAYERS)
+      COMBO(rbkt, G_RBKT, 26 27, 25, RIGHT_HAND_LAYERS)
 
       // On a "[R]aise" layer, left thumb combo acts as ctrl-alt/gui-spc:
       COMBO(underr, G_GUISPC, 31 32, 35, L_NAVSYM L_FN)
@@ -171,7 +177,8 @@ that are either low frequency or special use. Examples:
 //}}}
 
       // Forward delete on easy-ish combo:
-      COMBO(del, G_DEL, 27 28, 35, L_BASE)
+      COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
+      COMBO(delfn, G_DEL, 33 34, 35, RIGHT_HAND_LAYERS)
 
       // Intentionally reachable, but out of the way for hyper/meh.
       COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
@@ -194,7 +201,7 @@ that are either low frequency or special use. Examples:
         tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 31 32 34>;
+        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
       };
 
       prht: positional_right_hold_tap {
@@ -205,7 +212,7 @@ that are either low frequency or special use. Examples:
         tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 31 32 34>;
+        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
       };
 
       fhrm: fkey_home_row_mod {
@@ -227,7 +234,8 @@ that are either low frequency or special use. Examples:
         tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 31 32 33 34>;
+        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       rhrm: right_home_row_mod {
@@ -238,7 +246,8 @@ that are either low frequency or special use. Examples:
         tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 31 32 33 34>;
+        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       ght: gerrys_hold_tap {
@@ -281,9 +290,9 @@ that are either low frequency or special use. Examples:
 		base_layer {
 			bindings = <
         &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
-        G_A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &kp M               &kp N            &kp E              &kp I         G_O
+        G_A          G_R           G_S           G_T             &kp G         /*& &*/     &kp M               G_N              G_E                G_I           G_O
         &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &trans        G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
+                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
 			>;
 		};
 
@@ -292,7 +301,7 @@ that are either low frequency or special use. Examples:
         AS(Q)        AS(W)         AS(F)         AS(P)           AS(B)         /*& &*/     AS(J)               AS(L)            AS(U)              AS(Y)         AS(SEMI)
         AS(A)        AS(R)         AS(S)         AS(T)           AS(G)         /*& &*/     AS(M)               AS(N)            AS(E)              AS(I)         AS(O)
         AS(Z)        AS(X)         AS(C)         AS(D)           AS(V)         /*& &*/     AS(K)               AS(H)            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &tog L_GAME1  &trans          &trans    /*& &*/ &trans         &trans           &trans
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
@@ -300,8 +309,8 @@ that are either low frequency or special use. Examples:
 			bindings = <
         &kp Q          &kp W         &kp F         &kp P           &kp B         /*& &*/     &trans              &trans           &trans         &trans        &trans 
         &kp A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &trans              &trans           &trans         &trans        &trans 
-        &glt L_GAME2 Z &kp X         &kp C         &kp D           &kp V         /*& &*/     &trans              &trans           &trans         &trans        &trans 
-                                       &kp LSHFT       &kp SPC         &kp LCTRL /*& &*/ &trans         &trans           &tog L_GAME1                                       
+        &kp Z          &kp X         &kp C         &kp D           &kp V         /*& &*/     &trans              &trans           &trans         &trans        &trans 
+                                    &glt L_GAME2 LSHFT &kp SPC         &kp LCTRL /*& &*/ &trans         &trans           &tog L_GAME1                                       
 			>;
 		};
 
@@ -309,16 +318,16 @@ that are either low frequency or special use. Examples:
 			bindings = <
         &kp ESC      &kp N6        &kp N5        &kp N4          &kp UP        /*& &*/     &trans              &trans           &trans         &trans        &trans
         &kp TAB      &kp N3        &kp N2        &kp N1          &kp N0        /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &trans       &kp N9        &kp N8        &kp N7          &kp DOWN      /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &kp HOME     &kp N9        &kp N8        &kp N7          &kp DOWN      /*& &*/     &trans              &trans           &trans         &trans        &trans
                                        &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
 		navsym_layer {
 			bindings = <
-        AS(GRAVE)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     &trans              AS(N4)           AS(N5)             AS(N6)        &trans
-        G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(EQUAL)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &kp COMMA    G_LBKT        G_LPRN       G_RPRN           G_RBKT      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+        AS(GRAVE)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     G_RPRN              AS(N4)           AS(N5)             AS(N6)        &trans
+        G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &kp COMMA    &trans        &trans       &trans           &trans      /*& &*/     G_LPRN              AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
 			>;
 		};
@@ -326,7 +335,7 @@ that are either low frequency or special use. Examples:
 		fn_layer {
 			bindings = <
         &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F13          &kp F4           &kp F5             &kp F6        &kp F11   
-        &kp LALT     &kp LGUI      &kp LCTRL    &kp LSHFT        &trans      /*& &*/     &kp F14          G_F1             G_F2               G_F3          G_F10
+        &kp LSHFT    &kp LGUI      &kp LALT     &kp LCTRL        &trans      /*& &*/     &kp F14          G_F1             G_F2               G_F3          G_F10
         &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F15          &kp F7           &kp F8             &kp F9        &kp F12
                                        &trans        G_SPC_R         G_ESC_R /*& &*/ &trans         &trans           &trans
 			>;
