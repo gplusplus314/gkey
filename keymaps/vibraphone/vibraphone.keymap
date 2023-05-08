@@ -251,8 +251,8 @@
         compatible = "zmk,behavior-hold-tap";
         label = "AUTO_SHIFT";
         #binding-cells = <2>;
-        tapping_term_ms = <125>;
-        quick_tap_ms = <125>;
+        tapping_term_ms = <150>;
+        quick_tap_ms = <150>;
         flavor = "tap-preferred";
         bindings = <&kp>, <&kp>;
       };
@@ -301,9 +301,9 @@
 
 		navsym_layer {
 			bindings = <
-        AS(SQT)      &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(RBKT)
+        AS(COMMA)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        &trans  
         G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &kp F20      &kp F19       &kp F18      &kp F17          &kp F16     /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(LBKT)
+        &kp F20      &kp F19       &kp F18      &kp F17          &kp F16     /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
 			>;
 		};
