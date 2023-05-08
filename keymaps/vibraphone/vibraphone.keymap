@@ -222,6 +222,7 @@ that are either low frequency or special use. Examples:
         flavor = "balanced";
         tapping-term-ms = <150>;
         quick-tap-ms = <150>;
+        global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <16 17 18 19 33 34>;
       };
@@ -231,8 +232,9 @@ that are either low frequency or special use. Examples:
         label = "LEFT_HOME_ROW_MOD";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <200>;
-        quick-tap-ms = <175>;
+        tapping-term-ms = <280>;
+        quick-tap-ms = <150>;
+        global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -243,8 +245,9 @@ that are either low frequency or special use. Examples:
         label = "RIGHT_HOME_ROW_MOD";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <200>;
-        quick-tap-ms = <175>;
+        tapping-term-ms = <280>;
+        quick-tap-ms = <150>;
+        global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
