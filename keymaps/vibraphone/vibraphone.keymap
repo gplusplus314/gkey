@@ -81,7 +81,7 @@
 // Right thumb {{{
 #define G_RET   &glt  L_FNWM       RET
 #define G_BSPC  &glt  L_NAVSYM     BSPC
-#define G_DEL   &glt  L_UTIL       DEL
+#define G_UTIL  &mo   L_UTIL
 //}}}
 
 //}}}
@@ -96,7 +96,7 @@
                 ╰────────────╯  ╰────────────╯            */
     #define KEYS_LFINGERS 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
     #define KEYS_RFINGERS 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
-    #define KEYS_LTHUMBS 30 37 32
+    #define KEYS_LTHUMBS 30 31 32
     #define KEYS_RTHUMBS 33 34 35
     #define KEYS_THUMBS KEYS_LTHUMBS KEYS_RTHUMBS
 
@@ -147,38 +147,11 @@
       COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
       COMBO(rbkt, G_RBKT, 26 27, 25, RIGHT_HAND_LAYERS)
 
-      // On a "[R]aise" layer, left thumb combo acts as ctrl-alt/gui-spc:
-      //COMBO(underr, G_GUISPC, 31 32, 35, L_NAVSYM L_UTIL)
-      // TODO: Describe tradeoff between moving thumb slightly vs home row for gui {{{markdown
-/*
-# Thumb
-
-## Pros
-Easy to get used to using the thumb. Low effort, but some special keystrokes
-that are either low frequency or special use. Examples:
-
-```
-  Low Freq: Super+ESC
-  Special Use: Super+SPC
-    - puts the "global" leader on the same thumb position as vim leader
-```
-
-## Cons
-- [ ] *Frequent* thumb movement (even if small)
-- [ ] Needs some, but not difficult precision
-
-# Home Row (ring fingers)
-## Pros
-- [ ] No movement other than the actual keypress
-
-## Cons
-- [ ] Has 6 special cases that are less predictable
-*/
-//}}}
-
       // Forward delete on easy-ish combo:
       COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
-      //COMBO(delfn, G_DEL, 33 34, 35, RIGHT_HAND_LAYERS)
+
+      // Utility layer on right thumb combo:
+      COMBO(delfn, G_UTIL, 33 34, 35, RIGHT_HAND_LAYERS)
 
       // Intentionally reachable, but out of the way for hyper/meh.
       //COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
@@ -236,7 +209,7 @@ that are either low frequency or special use. Examples:
         quick-tap-ms = <150>;
         global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
+        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
       };
 
@@ -249,7 +222,7 @@ that are either low frequency or special use. Examples:
         quick-tap-ms = <150>;
         global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
+        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
       };
 
@@ -328,9 +301,9 @@ that are either low frequency or special use. Examples:
 
 		navsym_layer {
 			bindings = <
-        AS(SQT)      &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(RPRN)
+        AS(SQT)      &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(RBKT)
         G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &trans       &trans        &trans       &trans           &trans      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(LPRN)
+        &kp F20      &kp F19       &kp F18      &kp F17          &kp F16     /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(LBKT)
                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
 			>;
 		};
@@ -346,9 +319,9 @@ that are either low frequency or special use. Examples:
 
 		fnwm_layer {
 			bindings = <
-        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RPRN))
+        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RBKT))
         G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LPRN))
+        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LBKT))
                                         &trans       &trans             &trans      /*& &*/ &trans         &trans           &trans
 			>;
 		};
