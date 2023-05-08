@@ -43,6 +43,7 @@ fi
 popd
 
 pushd "firmware/zmk/$KEYMAP/config/boards/shields"
+rm "$KEYMAP" || echo ""
 ln -s "$REPO_DIR/keymaps/$KEYMAP" "$KEYMAP"
 popd
 

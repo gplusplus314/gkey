@@ -53,29 +53,21 @@
 #define G_G_COMMA AS2(COMMA, )
 
 // Left home row mods {{{
-#define G_A     &lhrm LSHFT        A
+#define G_A     &lsft LSHFT        A
 #define G_R     &lhrm LALT         R
 #define G_S     &lhrm LGUI         S
 #define G_T     &lhrm LCTRL        T
 #define G_F1    &lhrm LCTRL        F1
 #define G_F2    &lhrm LGUI         F2
 #define G_F3    &lhrm LALT         F3
-#define G_F10   &lhrm LSHFT        F10
+#define G_F10   &lsft LSHFT        F10
 //}}}
 
 // Right home row mods {{{
 #define G_N     &rhrm RCTRL        N
 #define G_E     &rhrm RGUI         E
 #define G_I     &rhrm RALT         I
-#define G_O     &rhrm RSHFT        O
-//}}}
-
-// Left thumb {{{
-#define G_SPC     &ght  LCTRL        SPC
-#define G_SPC_R   &ght  LCTRL        LC(SPC)
-#define G_ESC     &ght  LALT         ESC
-#define G_ESC_R   &ght  LALT         LA(ESC)
-#define G_GUISPC  &ght  LA(LCTRL)    LG(SPC)
+#define G_O     &rsft RSHFT        O
 //}}}
 
 // Right thumb {{{
@@ -166,40 +158,6 @@
 
     // Behaviors {{{
     behaviors {
-      plht: positional_left_hold_tap {
-        compatible = "zmk,behavior-hold-tap";
-        label = "POSITIONAL_LEFT_HOLD_TAP";
-        #binding-cells = <2>;
-        flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
-        bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
-      };
-
-      prht: positional_right_hold_tap {
-        compatible = "zmk,behavior-hold-tap";
-        label = "POSITIONAL_RIGHT_HOLD_TAP";
-        #binding-cells = <2>;
-        flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
-        bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
-      };
-
-      fhrm: fkey_home_row_mod {
-        compatible = "zmk,behavior-hold-tap";
-        label = "FKEY_HOME_ROW_MOD";
-        #binding-cells = <2>;
-        flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
-        global-quick-tap-ms = <175>;
-        bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <16 17 18 19 33 34>;
-      };
-
       lhrm: left_home_row_mod {
         compatible = "zmk,behavior-hold-tap";
         label = "LEFT_HOME_ROW_MOD";
@@ -226,15 +184,30 @@
         hold-trigger-on-release; // delay positional check until key-release
       };
 
-      ght: gerrys_hold_tap {
+      lsft: left_home_shift {
         compatible = "zmk,behavior-hold-tap";
-        label = "HOLD_TAP";
+        label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <125>;
-        quick-tap-ms = <125>;
+        tapping-term-ms = <280>;
+        quick-tap-ms = <150>;
+        //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
-        hold-trigger-key-positions = <10 19 31 32 33 34>;
+        hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
+        hold-trigger-on-release; // delay positional check until key-release
+      };
+
+      rsft: right_home_shift {
+        compatible = "zmk,behavior-hold-tap";
+        label = "RIGHT_HOME_SHIFT";
+        #binding-cells = <2>;
+        flavor = "balanced";
+        tapping-term-ms = <280>;
+        quick-tap-ms = <150>;
+        //global-quick-tap-ms = <175>;
+        bindings = <&kp>, <&kp>;
+        hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       glt: gerrys_layer_tap {
