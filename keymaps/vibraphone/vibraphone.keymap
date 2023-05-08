@@ -26,8 +26,8 @@
 #define L_GAME1   2
 #define L_GAME2   3
 #define L_NAVSYM  4
-#define L_FN      5
-#define L_WM      6
+#define L_UTIL    5
+#define L_FNWM    6
 #define L_STNGS   7
 #define L_TRANS   8
 
@@ -54,20 +54,20 @@
 
 // Left home row mods {{{
 #define G_A     &lhrm LSHFT        A
-#define G_R     &lhrm LGUI         R
-#define G_S     &lhrm LALT         S
+#define G_R     &lhrm LALT         R
+#define G_S     &lhrm LGUI         S
 #define G_T     &lhrm LCTRL        T
+#define G_F1    &lhrm LCTRL        F1
+#define G_F2    &lhrm LGUI         F2
+#define G_F3    &lhrm LALT         F3
+#define G_F10   &lhrm LSHFT        F10
 //}}}
 
 // Right home row mods {{{
 #define G_N     &rhrm RCTRL        N
-#define G_E     &rhrm RALT         E
-#define G_I     &rhrm RGUI         I
+#define G_E     &rhrm RGUI         E
+#define G_I     &rhrm RALT         I
 #define G_O     &rhrm RSHFT        O
-#define G_F1    &prht RCTRL        F1
-#define G_F2    &prht RALT         F2
-#define G_F3    &prht RGUI         F3
-#define G_F10   &prht RSHFT        F10
 //}}}
 
 // Left thumb {{{
@@ -79,9 +79,9 @@
 //}}}
 
 // Right thumb {{{
-#define G_RET   &glt  L_WM         RET
+#define G_RET   &glt  L_FNWM       RET
 #define G_BSPC  &glt  L_NAVSYM     BSPC
-#define G_DEL   &glt  L_FN         DEL
+#define G_DEL   &glt  L_UTIL       DEL
 //}}}
 
 //}}}
@@ -148,7 +148,7 @@
       COMBO(rbkt, G_RBKT, 26 27, 25, RIGHT_HAND_LAYERS)
 
       // On a "[R]aise" layer, left thumb combo acts as ctrl-alt/gui-spc:
-      COMBO(underr, G_GUISPC, 31 32, 35, L_NAVSYM L_FN)
+      //COMBO(underr, G_GUISPC, 31 32, 35, L_NAVSYM L_UTIL)
       // TODO: Describe tradeoff between moving thumb slightly vs home row for gui {{{markdown
 /*
 # Thumb
@@ -178,13 +178,13 @@ that are either low frequency or special use. Examples:
 
       // Forward delete on easy-ish combo:
       COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
-      COMBO(delfn, G_DEL, 33 34, 35, RIGHT_HAND_LAYERS)
+      //COMBO(delfn, G_DEL, 33 34, 35, RIGHT_HAND_LAYERS)
 
       // Intentionally reachable, but out of the way for hyper/meh.
-      COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
-      COMBO(rmeh, &kp RS(RC(RALT)), 5 15, 35, L_BASE)
-      COMBO(lhyper, &kp LS(LC(LA(LGUI))), 14 24, 35, L_BASE)
-      COMBO(rhyper, &kp RS(RC(RA(RGUI))), 15 25, 35, L_BASE)
+      //COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
+      //COMBO(rmeh, &kp RS(RC(RALT)), 5 15, 35, L_BASE)
+      //COMBO(lhyper, &kp LS(LC(LA(LGUI))), 14 24, 35, L_BASE)
+      //COMBO(rhyper, &kp RS(RC(RA(RGUI))), 15 25, 35, L_BASE)
 
       // Get into gaming mode easily, but out of the way:
       //COMBO(gaming, &tog L_GAME, 30 35, 25, L_BASE)
@@ -231,8 +231,8 @@ that are either low frequency or special use. Examples:
         label = "LEFT_HOME_ROW_MOD";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
+        tapping-term-ms = <200>;
+        quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_THUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -243,8 +243,8 @@ that are either low frequency or special use. Examples:
         label = "RIGHT_HOME_ROW_MOD";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <150>;
-        quick-tap-ms = <150>;
+        tapping-term-ms = <200>;
+        quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_THUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -292,7 +292,7 @@ that are either low frequency or special use. Examples:
         &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
         G_A          G_R           G_S           G_T             &kp G         /*& &*/     &kp M               G_N              G_E                G_I           G_O
         &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
+                                       &tog L_GAME1  &kp SPC         &kp ESC   /*& &*/ G_RET          G_BSPC           &trans
 			>;
 		};
 
@@ -316,37 +316,37 @@ that are either low frequency or special use. Examples:
 
 		game2_layer {
 			bindings = <
-        &kp ESC      &kp N6        &kp N5        &kp N4          &kp UP        /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &kp TAB      &kp N3        &kp N2        &kp N1          &kp N0        /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &kp HOME     &kp N9        &kp N8        &kp N7          &kp DOWN      /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &kp ESC      &kp N6        &kp N5        &kp N4          &kp PG_UP     /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &kp N0       &kp N3        &kp N2        &kp N1          &kp PG_DN     /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &kp HOME     &kp N9        &kp N8        &kp N7          &kp TAB       /*& &*/     &trans              &trans           &trans         &trans        &trans
                                        &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
 		navsym_layer {
 			bindings = <
-        AS(GRAVE)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     G_RPRN              AS(N4)           AS(N5)             AS(N6)        &trans
+        AS(SQT)      &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(RPRN)
         G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &kp COMMA    &trans        &trans       &trans           &trans      /*& &*/     G_LPRN              AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+        &trans       &trans        &trans       &trans           &trans      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(LPRN)
                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
-		fn_layer {
+		util_layer {
 			bindings = <
-        &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F13          &kp F4           &kp F5             &kp F6        &kp F11   
-        &kp LSHFT    &kp LGUI      &kp LALT     &kp LCTRL        &trans      /*& &*/     &kp F14          G_F1             G_F2               G_F3          G_F10
-        &trans       &trans        &trans       &trans           &trans      /*& &*/     &kp F15          &kp F7           &kp F8             &kp F9        &kp F12
-                                       &trans        G_SPC_R         G_ESC_R /*& &*/ &trans         &trans           &trans
+        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     &trans              &trans           &trans         &trans        &trans 
+                                       &trans        &trans          &trans         /*& &*/ &trans         &trans           &trans                                       
 			>;
 		};
 
-		wm_layer {
+		fnwm_layer {
 			bindings = <
-        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     AS(LG(GRAVE))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RIGHT))
-        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     AS(LG(EQUAL))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LEFT))
-                                       &trans &ght LSHFT LS(SPC) &ght LCTRL LC(ESC) /*& &*/ &trans         &trans           &trans
+        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RPRN))
+        G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
+        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LPRN))
+                                        &trans       &trans             &trans      /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
