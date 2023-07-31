@@ -11,9 +11,21 @@ else
 	exit 1
 fi
 
-SDK_VERSION="0.15.0"
-# TODO: Default this better (assumes macOS)
-SDK_OS_SUFFIX="_macos"
+SDK_VERSION="0.16.1"
+
+os=$(uname)
+if [[ "$os" == "Darwin" ]]; then
+	SDK_OS_SUFFIX="_macos"
+else
+	echo "Unsupported OS: $os"
+fi
+
+arch=$(uname -m)
+if [[ "$arch" == "arm64" ]]; then
+	SDK_ARCH="aarch64"
+elif [[ "$arch" != "x86_64" ]]; then
+	echo "Unknown architecture: $arch"
+fi
 
 export ZEPHYR_TOOLCHAIN_VARIANT="zephyr"
 
@@ -26,10 +38,10 @@ if [ "$ZEPHYR_BASE" == "" ]; then
 	pushd ~/.local/opt
 
 	if [ ! -d "zephyr-sdk-$SDK_VERSION" ]; then
-		wget "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$SDK_VERSION/zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-x86_64.tar.gz"
+		wget "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$SDK_VERSION/zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-$SDK_ARCH.tar.xz"
 		wget -O - "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$SDK_VERSION/sha256.sum" | shasum --check --ignore-missing
-		tar xvf "zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-x86_64.tar.gz"
-		rm "zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-x86_64.tar.gz"
+		tar xvf "zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-$SDK_ARCH.tar.xz"
+		rm "zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-$SDK_ARCH.tar.xz"
 		pushd "zephyr-sdk-$SDK_VERSION"
 		./setup.sh
 		popd

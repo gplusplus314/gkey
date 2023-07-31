@@ -22,7 +22,7 @@
 
 // Layer Indices {{{
 #define L_BASE    0
-#define L_ASALPHA 1
+#define L_EXPRMNT 1
 #define L_GAME1   2
 #define L_GAME2   3
 #define L_NAVSYM  4
@@ -31,7 +31,7 @@
 #define L_STNGS   7
 #define L_TRANS   8
 
-#define ALPHA_LAYERS L_BASE L_ASALPHA
+#define ALPHA_LAYERS L_BASE L_EXPRMNT
 #define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM
 #define GAMING_LAYERS L_GAME1 L_GAME2
 #define RIGHT_HAND_LAYERS TYPING_LAYERS GAMING_LAYERS
@@ -55,19 +55,24 @@
 // Left home row mods {{{
 #define G_A     &lsft LSHFT        A
 #define G_R     &lhrm LALT         R
-#define G_S     &lhrm LGUI         S
-#define G_T     &lhrm LCTRL        T
-#define G_F1    &lhrm LCTRL        F1
-#define G_F2    &lhrm LGUI         F2
+#define G_S     &lhrm LCTRL        S
+#define G_T     &lhrm LGUI         T
+#define G_F1    &lhrm LGUI         F1
+#define G_F2    &lhrm LCTRL        F2
 #define G_F3    &lhrm LALT         F3
 #define G_F10   &lsft LSHFT        F10
 //}}}
 
 // Right home row mods {{{
-#define G_N     &rhrm RCTRL        N
-#define G_E     &rhrm RGUI         E
+#define G_N     &rhrm RGUI         N
+#define G_E     &rhrm RCTRL        E
 #define G_I     &rhrm RALT         I
 #define G_O     &rsft RSHFT        O
+//}}}
+
+// Left thumb {{{
+#define G_ESC  &glt  L_EXPRMNT   ESC
+#define G_SPC  &glt  L_NAVSYM    SPC
 //}}}
 
 // Right thumb {{{
@@ -112,10 +117,6 @@
       // Both pinkies for smart caps
       COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
 
-      // Fallback shift when autoshift is on
-      COMBO(lshft, &kp LSHFT, 10 11, 35, L_ASALPHA)
-      COMBO(rshft, &kp RSHFT, 18 19, 35, L_ASALPHA)
-
       // Nudge left/right without switching layers
       //COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
       //COMBO(rarrow, &kp RIGHT, 6 7, 35, RIGHT_HAND_LAYERS)
@@ -130,8 +131,8 @@
       COMBO(minus_r, AS(MINUS), 7  8,  25, RIGHT_HAND_LAYERS)
 
       // Window management: focus prev/next window
-      COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
-      COMBO(nextwin, AS(LG(DOWN)), 6 16, 35, L_BASE)
+      COMBO(prevwin, AS(LC(UP)), 3 13, 35, L_BASE)
+      COMBO(nextwin, AS(LC(DOWN)), 6 16, 35, L_BASE)
 
       // Shortcut to brackets:
       COMBO(lprn, G_LPRN, 12 23, 35, TYPING_LAYERS)
@@ -191,7 +192,7 @@
         flavor = "balanced";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
-        //global-quick-tap-ms = <175>;
+        global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -204,7 +205,7 @@
         flavor = "balanced";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
-        //global-quick-tap-ms = <175>;
+        global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -241,15 +242,15 @@
         &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
         G_A          G_R           G_S           G_T             &kp G         /*& &*/     &kp M               G_N              G_E                G_I           G_O
         &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &tog L_GAME1  &kp SPC         &kp ESC   /*& &*/ G_RET          G_BSPC           &trans
+                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
 			>;
 		};
 
-		asalpha_layer {
+		experimental_layer {
 			bindings = <
-        AS(Q)        AS(W)         AS(F)         AS(P)           AS(B)         /*& &*/     AS(J)               AS(L)            AS(U)              AS(Y)         AS(SEMI)
-        AS(A)        AS(R)         AS(S)         AS(T)           AS(G)         /*& &*/     AS(M)               AS(N)            AS(E)              AS(I)         AS(O)
-        AS(Z)        AS(X)         AS(C)         AS(D)           AS(V)         /*& &*/     AS(K)               AS(H)            AS(COMMA)          AS(DOT)       AS(FSLH)
+        AS(LG(RBKT)) AS(LG(N6))    AS(LG(N5))    AS(LG(N4))      AS(LG(EQUAL)) /*& &*/   AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RBKT)) 
+        AS(LG(N0))   AS(LG(N3))    AS(LG(N2))    AS(LG(N1))      AS(LG(GRAVE)) /*& &*/   AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
+        AS(LG(LBKT)) AS(LG(N9))    AS(LG(N8))    AS(LG(N7))      AS(LG(MINUS)) /*& &*/   AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LBKT)) 
                                        &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
@@ -284,7 +285,7 @@
 		util_layer {
 			bindings = <
         &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     &trans              &trans           &trans         &trans        &trans 
-        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &kp CAPS     &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     &trans              &trans           &trans         &trans        &trans 
         &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     &trans              &trans           &trans         &trans        &trans 
                                        &trans        &trans          &trans         /*& &*/ &trans         &trans           &trans                                       
 			>;
@@ -292,9 +293,9 @@
 
 		fnwm_layer {
 			bindings = <
-        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RBKT))
-        G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LBKT))
+        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LC(EQUAL))      AS(LC(N4))       AS(LC(N5))         AS(LC(N6))    AS(LC(RBKT))
+        G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LC(GRAVE))      AS(LC(N1))       AS(LC(N2))         AS(LC(N3))    AS(LC(N0))    
+        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LC(MINUS))      AS(LC(N7))       AS(LC(N8))         AS(LC(N9))    AS(LC(LBKT))
                                         &trans       &trans             &trans      /*& &*/ &trans         &trans           &trans
 			>;
 		};
@@ -302,7 +303,7 @@
 		settings_layer {
 			bindings = <
         &trans       &trans        &bt BT_SEL 4  &bt BT_SEL 3       &bt BT_CLR    /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &tog L_ASALPHA   &trans         &trans        &trans
+        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &trans           &trans         &trans        &trans
         &trans       &trans        &trans        &trans             &out OUT_USB  /*& &*/     &trans              &trans           &trans         &trans        &trans
                                        &trans        &trans             &trans    /*& &*/ &trans         &trans           &trans
 			>;
