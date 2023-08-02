@@ -189,26 +189,26 @@
         compatible = "zmk,behavior-hold-tap";
         label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "hold-preferred";
+        flavor = "balanced";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
-        //hold-trigger-on-release; // delay positional check until key-release
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       rsft: right_home_shift {
         compatible = "zmk,behavior-hold-tap";
         label = "RIGHT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "hold-preferred";
+        flavor = "balanced";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
-        //hold-trigger-on-release; // delay positional check until key-release
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       glt: gerrys_layer_tap {
