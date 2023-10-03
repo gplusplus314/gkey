@@ -196,9 +196,9 @@
         tapping-term-ms = <125>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <125>;
-				bindings = <&kp>, <&kp>;
+        bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
-        //hold-trigger-on-release; // delay positional check until key-release
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       rsft: right_home_shift {
@@ -211,7 +211,7 @@
         //global-quick-tap-ms = <125>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
-        //hold-trigger-on-release; // delay positional check until key-release
+        hold-trigger-on-release; // delay positional check until key-release
       };
 
       glt: gerrys_layer_tap {
