@@ -22,17 +22,17 @@
 
 // Layer Indices {{{
 #define L_BASE    0
-#define L_EXPRMNT 1
+#define L_RET     1
 #define L_GAME1   2
 #define L_GAME2   3
 #define L_NAVSYM  4
 #define L_UTIL    5
-#define L_FNWM    6
+#define L_ESC     6
 #define L_STNGS   7
 #define L_TRANS   8
 
-#define ALPHA_LAYERS L_BASE L_EXPRMNT
-#define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM
+#define ALPHA_LAYERS L_BASE
+#define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM L_ESC
 #define GAMING_LAYERS L_GAME1 L_GAME2
 #define RIGHT_HAND_LAYERS TYPING_LAYERS GAMING_LAYERS
 //}}}
@@ -48,9 +48,9 @@
 #define G_LBKT AS(LBKT)
 #define G_RBKT AS(RBKT)
 
-// NavSum Customizations
-#define G_A_DOT &lhrm LSHFT        DOT
-#define G_G_COMMA AS2(COMMA, )
+// NavSym Customizations
+//#define G_A_DOT &lhrm LSHFT        DOT
+//#define G_G_COMMA AS2(COMMA, )
 
 // Left home row mods {{{
 #define G_A     &lsft LSHFT        A
@@ -71,14 +71,14 @@
 //}}}
 
 // Left thumb {{{
-#define G_ESC  &glt  L_EXPRMNT   ESC
-#define G_SPC  &glt  L_NAVSYM    SPC
+#define G_ESC &glt  L_ESC ESC
+#define G_SPC &kp   SPC
 //}}}
 
 // Right thumb {{{
-#define G_RET   &glt  L_FNWM       RET
-#define G_BSPC  &glt  L_NAVSYM     BSPC
-#define G_UTIL  &mo   L_UTIL
+#define G_RET   &glt L_RET    RET
+#define G_BSPC  &glt L_NAVSYM BSPC
+#define G_UTIL  &mo  L_UTIL
 //}}}
 
 //}}}
@@ -143,6 +143,9 @@
       // Forward delete on easy-ish combo:
       COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
 
+			// Exclamation is common, put it on a combo:
+      COMBO(excl, &kp LS(N1), 21 22, 25, TYPING_LAYERS)
+
       // Utility layer on right thumb combo:
       COMBO(delfn, G_UTIL, 33 34, 35, RIGHT_HAND_LAYERS)
 
@@ -189,26 +192,26 @@
         compatible = "zmk,behavior-hold-tap";
         label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "balanced";
+        flavor = "hold-preferred";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
-        //global-quick-tap-ms = <175>;
-        bindings = <&kp>, <&kp>;
+        global-quick-tap-ms = <125>;
+				bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
-        hold-trigger-on-release; // delay positional check until key-release
+        //hold-trigger-on-release; // delay positional check until key-release
       };
 
       rsft: right_home_shift {
         compatible = "zmk,behavior-hold-tap";
         label = "RIGHT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "balanced";
+        flavor = "hold-preferred";
         tapping-term-ms = <280>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
-        hold-trigger-on-release; // delay positional check until key-release
+        //hold-trigger-on-release; // delay positional check until key-release
       };
 
       glt: gerrys_layer_tap {
@@ -246,12 +249,12 @@
 			>;
 		};
 
-		experimental_layer {
+		ent_layer {
 			bindings = <
-        AS(LG(RBKT)) AS(LG(N6))    AS(LG(N5))    AS(LG(N4))      AS(LG(EQUAL)) /*& &*/   AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RBKT)) 
-        AS(LG(N0))   AS(LG(N3))    AS(LG(N2))    AS(LG(N1))      AS(LG(GRAVE)) /*& &*/   AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        AS(LG(LBKT)) AS(LG(N9))    AS(LG(N8))    AS(LG(N7))      AS(LG(MINUS)) /*& &*/   AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LBKT)) 
-                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
+        &trans       &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans       /*& &*/     &trans              &kp LS(N4)       &kp LS(N5)         &kp LS(N6)    &trans    
+        &trans       &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE   /*& &*/     &kp LS(GRAVE)       &kp LS(N1)       &kp LS(N2)         &kp LS(N3)    &kp LS(N0)    
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP     /*& &*/     &trans              &kp LS(N7)       &kp LS(N8)         &kp LS(N9)    &kp LS(BSLH)  
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans                                              
 			>;
 		};
 
@@ -260,7 +263,7 @@
         &kp Q          &kp W         &kp F         &kp P           &kp B         /*& &*/     &trans              &trans           &trans         &trans        &trans 
         &kp A          &kp R         &kp S         &kp T           &kp G         /*& &*/     &trans              &trans           &trans         &trans        &trans 
         &kp Z          &kp X         &kp C         &kp D           &kp V         /*& &*/     &trans              &trans           &trans         &trans        &trans 
-                                    &glt L_GAME2 LSHFT &kp SPC         &kp LCTRL /*& &*/ &trans         &trans           &tog L_GAME1                                       
+                                &glt L_GAME2 LSHFT     &kp SPC         &kp LCTRL /*& &*/ &trans         &trans           &tog L_GAME1                                       
 			>;
 		};
 
@@ -275,28 +278,28 @@
 
 		navsym_layer {
 			bindings = <
-        AS(COMMA)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        &trans  
-        G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &kp F20      &kp F19       &kp F18      &kp F17          &kp F16     /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
-                                       &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
+        &trans        &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     &trans              AS(N4)           AS(N5)             AS(N6)        &trans
+        &caps_word    &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &trans        &trans        &trans       &trans           &trans      /*& &*/     &trans              AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+                                        &trans        &kp LS(MINUS)   &trans  /*& &*/ &trans         &trans           &trans                                             
 			>;
 		};
 
 		util_layer {
 			bindings = <
-        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans            /*& &*/     &trans              &trans           &trans         &trans        &trans 
-        &kp CAPS     &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE        /*& &*/     &trans              &trans           &trans         &trans        &trans 
-        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP          /*& &*/     &trans              &trans           &trans         &trans        &trans 
-                                       &trans        &trans          &trans         /*& &*/ &trans         &trans           &trans                                       
+        &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans       /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &kp CAPS     &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE   /*& &*/     &trans              &trans           &trans         &trans        &trans 
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP     /*& &*/     &trans              &trans           &trans         &trans        &trans 
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans                                       
 			>;
 		};
 
-		fnwm_layer {
+		esc_layer {
 			bindings = <
-        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LC(EQUAL))      AS(LC(N4))       AS(LC(N5))         AS(LC(N6))    AS(LC(RBKT))
-        G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LC(GRAVE))      AS(LC(N1))       AS(LC(N2))         AS(LC(N3))    AS(LC(N0))    
-        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LC(MINUS))      AS(LC(N7))       AS(LC(N8))         AS(LC(N9))    AS(LC(LBKT))
-                                        &trans       &trans             &trans      /*& &*/ &trans         &trans           &trans
+        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13       /*& &*/     AS(LC(EQUAL))         AS(LC(N4))       AS(LC(N5))             AS(LC(N6))       AS(LC(RBKT)) 
+        &kp F10      &kp F3        &kp F2        &kp F1           &kp 14       /*& &*/     AS(LC(GRAVE))         AS(LC(N1))       AS(LC(N2))             AS(LC(N3))       AS(LC(N0))   
+        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15       /*& &*/     AS(LC(MINUS))         AS(LC(N7))       AS(LC(N8))             AS(LC(N9))       AS(LC(LBKT)) 
+                                        &trans       &trans             &trans /*& &*/ &trans         &trans           &trans                                                          
 			>;
 		};
 
