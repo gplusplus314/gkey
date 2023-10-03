@@ -192,10 +192,10 @@
         compatible = "zmk,behavior-hold-tap";
         label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "hold-preferred";
-        tapping-term-ms = <280>;
+        flavor = "balanced";
+        tapping-term-ms = <125>;
         quick-tap-ms = <150>;
-        global-quick-tap-ms = <125>;
+        //global-quick-tap-ms = <125>;
 				bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
         //hold-trigger-on-release; // delay positional check until key-release
@@ -205,10 +205,10 @@
         compatible = "zmk,behavior-hold-tap";
         label = "RIGHT_HOME_SHIFT";
         #binding-cells = <2>;
-        flavor = "hold-preferred";
-        tapping-term-ms = <280>;
+        flavor = "balanced";
+        tapping-term-ms = <125>;
         quick-tap-ms = <150>;
-        //global-quick-tap-ms = <175>;
+        //global-quick-tap-ms = <125>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
         //hold-trigger-on-release; // delay positional check until key-release
@@ -279,8 +279,8 @@
 		navsym_layer {
 			bindings = <
         &trans        &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     &trans              AS(N4)           AS(N5)             AS(N6)        &trans
-        &caps_word    &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &trans        &trans        &trans       &trans           &trans      /*& &*/     &trans              AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+        &kp LS(SQT)   &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &trans        &trans        G_LPRN        G_RPRN          &trans      /*& &*/     &trans              AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
                                         &trans        &kp LS(MINUS)   &trans  /*& &*/ &trans         &trans           &trans                                             
 			>;
 		};
