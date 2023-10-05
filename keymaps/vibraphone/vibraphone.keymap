@@ -210,7 +210,7 @@
         flavor = "balanced";
         tapping-term-ms = <125>;
         quick-tap-ms = <150>;
-        require-prior-idle-ms = <125>;
+        require-prior-idle-ms = <135>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -223,7 +223,7 @@
         flavor = "balanced";
         tapping-term-ms = <125>;
         quick-tap-ms = <150>;
-        require-prior-idle-ms = <125>;
+        require-prior-idle-ms = <135>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
