@@ -48,38 +48,32 @@
 #define G_LBKT AS(LBKT)
 #define G_RBKT AS(RBKT)
 
-// NavSym Customizations
-//#define G_A_DOT &lhrm LSHFT        DOT
-//#define G_G_COMMA AS2(COMMA, )
-
 // Left home row mods {{{
 #define G_A     &lsft LSHFT        A
 #define G_R     &lhrm LALT         R
-#define G_S     &lhrm LCTRL        S
-#define G_T     &lhrm LGUI         T
-#define G_F1    &lhrm LGUI         F1
-#define G_F2    &lhrm LCTRL        F2
-#define G_F3    &lhrm LALT         F3
-#define G_F10   &lsft LSHFT        F10
+#define G_S     &lhrm LGUI         S
+#define G_T     &lhrm LCTRL        T
 //}}}
 
 // Right home row mods {{{
-#define G_N     &rhrm RGUI         N
-#define G_E     &rhrm RCTRL        E
+#define G_N     &rhrm RCTRL        N
+#define G_E     &rhrm RGUI         E
 #define G_I     &rhrm RALT         I
 #define G_O     &rsft RSHFT        O
+#define G_F1    &lhrm RCTRL        F1
+#define G_F2    &lhrm RGUI         F2
+#define G_F3    &lhrm RALT         F3
+#define G_F10   &lsft RSHFT        F10
 //}}}
 
 // Left thumb {{{
 #define G_SPC &kp SPC
 #define G_ESC &tm LSHFT ESC
-//#define G_ESC &glt  L_ESC ESC
 #define G_UTIL  &mo  L_UTIL
 //}}}
 
 // Right thumb {{{
-//#define G_RET   &glt L_RET    RET
-#define G_RET   &tm  RSHFT    RET
+#define G_RET   &glt L_RET    RET
 #define G_BSPC  &glt L_NAVSYM BSPC
 //}}}
 
@@ -111,6 +105,13 @@
         key-positions = <KEYPOS>; \
         layers = <LAYERS>; \
       };
+      #define COMBO2(NAME, BINDINGS, KEYPOS, TIMEOUT, LAYERS) \
+      combo_##NAME { \
+        timeout-ms = <TIMEOUT>; \
+        bindings = <BINDINGS>; \
+        key-positions = <KEYPOS>; \
+        layers = <LAYERS>; \
+      };
       //}}}
 
       // Intentionally out-of-the-way settings layer.
@@ -119,10 +120,6 @@
       // Both pinkies for smart caps
       COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
 
-      // Nudge left/right without switching layers
-      //COMBO(larrow, &kp LEFT, 2 3, 35, ALPHA_LAYERS)
-      //COMBO(rarrow, &kp RIGHT, 6 7, 35, RIGHT_HAND_LAYERS)
-      
       // Use most comfortable combo for most frequent non-alpha chars:
       COMBO(tab, AS(TAB), 12 13, 25, TYPING_LAYERS)
       COMBO(quote, AS(SQT), 16 17, 25, RIGHT_HAND_LAYERS)
@@ -133,32 +130,20 @@
       COMBO(minus_r, AS(MINUS), 7  8,  25, RIGHT_HAND_LAYERS)
 
       // Window management: focus prev/next window
-      COMBO(prevwin, AS(LC(UP)), 3 13, 35, L_BASE)
-      COMBO(nextwin, AS(LC(DOWN)), 6 16, 35, L_BASE)
+      //COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
+      //COMBO(nextwin, AS(LG(DOWN)), 6 16, 35, L_BASE)
 
       // Shortcut to brackets:
-      COMBO(lprn, G_LPRN, 12 23, 35, TYPING_LAYERS)
-      COMBO(rprn, G_RPRN, 17 26, 35, RIGHT_HAND_LAYERS)
+      COMBO(lprn, G_LPRN, 12 23, 25, TYPING_LAYERS)
+      COMBO(rprn, G_RPRN, 17 26, 25, RIGHT_HAND_LAYERS)
       COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
       COMBO(rbkt, G_RBKT, 26 27, 25, RIGHT_HAND_LAYERS)
 
       // Forward delete on easy-ish combo:
-      COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
-
-			// Exclamation is common, put it on a combo:
-      COMBO(excl, &kp LS(N1), 21 22, 25, TYPING_LAYERS)
+      COMBO(del, &kp DEL, 21 22, 25, RIGHT_HAND_LAYERS)
 
       // Utility layer on left thumb combo:
       COMBO(delfn, G_UTIL, 31 32, 35, TYPING_LAYERS)
-
-      // Intentionally reachable, but out of the way for hyper/meh.
-      //COMBO(lmeh, &kp LS(LC(LALT)), 4 14, 35, L_BASE)
-      //COMBO(rmeh, &kp RS(RC(RALT)), 5 15, 35, L_BASE)
-      //COMBO(lhyper, &kp LS(LC(LA(LGUI))), 14 24, 35, L_BASE)
-      //COMBO(rhyper, &kp RS(RC(RA(RGUI))), 15 25, 35, L_BASE)
-
-      // Get into gaming mode easily, but out of the way:
-      //COMBO(gaming, &tog L_GAME, 30 35, 25, L_BASE)
     };
     //}}}
 
@@ -208,9 +193,9 @@
         label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <125>;
+        tapping-term-ms = <135>;
         quick-tap-ms = <150>;
-        require-prior-idle-ms = <135>;
+        require-prior-idle-ms = <115>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_RFINGERS KEYS_RTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -221,9 +206,9 @@
         label = "RIGHT_HOME_SHIFT";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <125>;
+        tapping-term-ms = <135>;
         quick-tap-ms = <150>;
-        require-prior-idle-ms = <135>;
+        require-prior-idle-ms = <115>;
         bindings = <&kp>, <&kp>;
         hold-trigger-key-positions = <KEYS_LFINGERS KEYS_LTHUMBS>;
         hold-trigger-on-release; // delay positional check until key-release
@@ -266,10 +251,10 @@
 
 		ent_layer {
 			bindings = <
-        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans  
-        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans  
-        &trans       &trans        &trans        &trans          &trans        /*& &*/     &trans              &trans           &trans         &trans        &trans  
-                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans                                        
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &kp LS(EQUAL)       &kp LS(N4)       &kp LS(N5)         &kp LS(N6)    &kp LS(SQT)  
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &kp LS(GRAVE)       &kp LS(N1)       &kp LS(N2)         &kp LS(N3)    &kp LS(N0)   
+        &trans       &trans        &trans        &trans          &trans        /*& &*/     &kp LS(MINUS)       &kp LS(N7)       &kp LS(N8)         &kp LS(N9)    &kp LS(BSLH) 
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans                                             
 			>;
 		};
 
@@ -293,10 +278,10 @@
 
 		navsym_layer {
 			bindings = <
-        AS(EQUAL)     &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(COMMA)           AS(N4)           AS(N5)             AS(N6)        AS(SQT)
-        AS(MINUS)     &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        G_LBKT        G_LPRN        G_RPRN       AS(TAB)          G_RBKT      /*& &*/     AS(DOT)             AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
-                                        &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans                                             
+        &kp LS(MINUS)  &kp HOME      &kp UP       &kp END         &kp PG_UP    /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(SQT)
+        G_LPRN         &kp LEFT      &kp DOWN     &kp RIGHT       &kp PG_DN    /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &kp LS(LBKT)   G_LBKT        G_RBKT       G_RPRN          &kp LS(RBKT) /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+                                         &trans        &trans           &trans /*& &*/ &trans         &trans           &trans                                             
 			>;
 		};
 
@@ -320,9 +305,9 @@
 
 		settings_layer {
 			bindings = <
-        &trans       &trans        &bt BT_SEL 4  &bt BT_SEL 3       &bt BT_CLR    /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &trans       &trans        &trans        &trans             &out OUT_USB  /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &trans        &bt BT_SEL 4  &bt BT_SEL 3       &out OUT_BLE  /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_USB  /*& &*/     &trans              &trans           &trans         &trans        &trans
+        &trans       &trans        &trans        &trans             &bt BT_CLR    /*& &*/     &trans              &trans           &trans         &trans        &trans
                                        &trans        &trans             &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
