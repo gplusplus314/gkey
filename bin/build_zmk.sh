@@ -47,18 +47,20 @@ rm "$KEYMAP" || echo ""
 ln -s "$REPO_DIR/keymaps/$KEYMAP" "$KEYMAP"
 popd
 
+mkdir -p out
+
 pushd deps/zmk/app
 ZMK_APP_DIR=$(pwd)
 set +e
-west build -p -d build/left -b "$BOARD" -- -DSHIELD=${KEYMAP}_left \
+west build -c -p -d build/left -b "$BOARD" -- -DSHIELD=${KEYMAP}_left \
 	-DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
+cp "$ZMK_APP_DIR/build/left/zephyr/zmk.uf2" "../../../out/$KEYMAP.uf2"
+west build -c -p -d build/right -b "$BOARD" -- -DSHIELD=${KEYMAP}_right \
+	-DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
+cp "$ZMK_APP_DIR/build/right/zephyr/zmk.uf2" "../../../out/$KEYMAP.right.uf2"
 STATUS="$?"
 set -e
 popd
-
-mkdir -p out
-
-cp "$ZMK_APP_DIR/build/left/zephyr/zmk.uf2" "out/$KEYMAP.uf2"
 
 pushd "firmware/zmk/$KEYMAP/config/boards/shields"
 rm "$KEYMAP"

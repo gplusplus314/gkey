@@ -1,4 +1,4 @@
-/* Copyright 2023 Gerry Hernandez (@gerryhernandez)
+/* Copyright 2023 Gerry Hernandez (@gplusplus314)
  * Copyright 2023 Cyboard LLC (@Cyboard-DigitalTailor)
  * SPDX-License-Identifier: GPL-2.0-or-later
  */

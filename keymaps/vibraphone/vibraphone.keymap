@@ -76,6 +76,11 @@
 #define G_UTIL  &mo   L_UTIL
 //}}}
 
+// Left thumb {{{
+#define G_SPC  &glt   L_NAVSYM    SPC
+#define G_ESC  &glt   L_FNWM      ESC
+//}}}
+
 //}}}
 
 / {
@@ -110,7 +115,7 @@
       COMBO(settings, &sl L_STNGS, 6 7 8 9, 35, TYPING_LAYERS)
 
       // Both pinkies for smart caps
-      COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
+      //COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
 
       // Fallback shift when autoshift is on
       COMBO(lshft, &kp LSHFT, 10 11, 35, L_ASALPHA)
@@ -130,14 +135,16 @@
       COMBO(minus_r, AS(MINUS), 7  8,  25, RIGHT_HAND_LAYERS)
 
       // Window management: focus prev/next window
-      COMBO(prevwin, AS(LG(UP)), 3 13, 35, L_BASE)
-      COMBO(nextwin, AS(LG(DOWN)), 6 16, 35, L_BASE)
+      //COMBO(prevwin, AS(LC(UP)), 3 13, 35, L_BASE)
+      //COMBO(nextwin, AS(LC(DOWN)), 6 16, 35, L_BASE)
 
       // Shortcut to brackets:
       COMBO(lprn, G_LPRN, 12 23, 35, TYPING_LAYERS)
       COMBO(rprn, G_RPRN, 17 26, 35, RIGHT_HAND_LAYERS)
       COMBO(lbkt, G_LBKT, 22 23, 25, TYPING_LAYERS)
       COMBO(rbkt, G_RBKT, 26 27, 25, RIGHT_HAND_LAYERS)
+      COMBO(lbkt2, G_LBKT, 3 13, 25, L_BASE)
+      COMBO(rbkt2, G_RBKT, 6 16, 25, L_BASE)
 
       // Forward delete on easy-ish combo:
       COMBO(del, &kp DEL, 27 28, 25, RIGHT_HAND_LAYERS)
@@ -189,7 +196,7 @@
         label = "LEFT_HOME_SHIFT";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <280>;
+        tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
@@ -202,7 +209,7 @@
         label = "RIGHT_HOME_SHIFT";
         #binding-cells = <2>;
         flavor = "balanced";
-        tapping-term-ms = <280>;
+        tapping-term-ms = <150>;
         quick-tap-ms = <150>;
         //global-quick-tap-ms = <175>;
         bindings = <&kp>, <&kp>;
@@ -241,7 +248,7 @@
         &kp Q        &kp W         &kp F         &kp P           &kp B         /*& &*/     &kp J               &kp L            &kp U              &kp Y         AS(SEMI)
         G_A          G_R           G_S           G_T             &kp G         /*& &*/     &kp M               G_N              G_E                G_I           G_O
         &kp Z        &kp X         &kp C         &kp D           &kp V         /*& &*/     &kp K               &kp H            AS(COMMA)          AS(DOT)       AS(FSLH)
-                                       &tog L_GAME1  &kp SPC         &kp ESC   /*& &*/ G_RET          G_BSPC           &trans
+                                       &tog L_GAME1  G_SPC           G_ESC     /*& &*/ G_RET          G_BSPC           &trans
 			>;
 		};
 
@@ -274,10 +281,10 @@
 
 		navsym_layer {
 			bindings = <
-        AS(COMMA)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        &trans  
-        G_A_DOT      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &kp F20      &kp F19       &kp F18      &kp F17          &kp F16     /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
-                                       &trans        &trans          &trans  /*& &*/ &trans         &trans           &trans
+        AS(COMMA)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(SQT)
+        AS(DOT)      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
+        &trans       &trans        &trans       AS(TAB)          &trans      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+                                       &trans        &trans          &trans  /*& &*/ &trans         &kp DEL          &trans
 			>;
 		};
 
@@ -292,17 +299,17 @@
 
 		fnwm_layer {
 			bindings = <
-        &kp F11      &kp F6        &kp F5        &kp F4           &kp 13            /*& &*/     AS(LG(EQUAL))      AS(LG(N4))       AS(LG(N5))         AS(LG(N6))    AS(LG(RBKT))
-        G_F10        G_F3          G_F2          G_F1             &kp 14            /*& &*/     AS(LG(GRAVE))      AS(LG(N1))       AS(LG(N2))         AS(LG(N3))    AS(LG(N0))    
-        &kp F12      &kp F9        &kp F8        &kp F7           &kp 15            /*& &*/     AS(LG(MINUS))      AS(LG(N7))       AS(LG(N8))         AS(LG(N9))    AS(LG(LBKT))
-                                        &trans       &trans             &trans      /*& &*/ &trans         &trans           &trans
+			  &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans       /*& &*/    &kp 13             &kp F4            &kp F5            &kp F6        &kp F11      
+        &kp CAPS     &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE   /*& &*/    &kp 14             &kp F1            &kp F2            &kp F3        &kp F10      
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP     /*& &*/    &kp 15             &kp F7            &kp F8            &kp F9        &kp F12      
+                                       &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};
 
 		settings_layer {
 			bindings = <
         &trans       &trans        &bt BT_SEL 4  &bt BT_SEL 3       &bt BT_CLR    /*& &*/     &trans              &trans           &trans         &trans        &trans
-        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &tog L_ASALPHA   &trans         &trans        &trans
+        &trans       &bt BT_SEL 2  &bt BT_SEL 1  &bt BT_SEL 0       &out OUT_BLE  /*& &*/     &trans              &trans           &trans         &trans        &trans
         &trans       &trans        &trans        &trans             &out OUT_USB  /*& &*/     &trans              &trans           &trans         &trans        &trans
                                        &trans        &trans             &trans    /*& &*/ &trans         &trans           &trans
 			>;

@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 
+set -x
+set -e
+
 KEYMAP="$1"
 if [ "$KEYMAP" == "vibraphone" ]; then
 	# TODO: Default this better (assumes macOS)
 	MOUNT_POINT="/Volumes/NICENANO"
-elif [ "$KEYMAP" == "vibraphone.right" ]; then
-	# TODO: Default this better (assumes macOS)
-	MOUNT_POINT="/Volumes/NICENANO"
+	RESET_FW="nicenanov2"
+	FW_NAME="zmk.uf2"
 elif [ "$KEYMAP" == "xylophone" ]; then
 	# TODO: Default this better (assumes macOS)
 	MOUNT_POINT="/Volumes/RPI-RP2"
+	echo "no reset firmware configured for $KEYMAP"
+	exit 1
 else
 	echo "unsupported keymap"
 	exit 1
@@ -21,7 +25,7 @@ until [ -d "$MOUNT_POINT" ]; do
 done
 echo "Flashing..."
 
-cp "out/$KEYMAP.uf2" "$MOUNT_POINT"
+cp "bin/firmware/$RESET_FW.uf2" "$MOUNT_POINT/$FW_NAME"
 
 until [ ! -d "$MOUNT_POINT" ]; do
 	sleep 1
