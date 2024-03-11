@@ -27,12 +27,12 @@
 #define L_GAME2   3
 #define L_NAVSYM  4
 #define L_UTIL    5
-#define L_ESC     6
+#define L_DUAL    6
 #define L_STNGS   7
 #define L_TRANS   8
 
 #define ALPHA_LAYERS L_BASE
-#define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM L_ESC
+#define TYPING_LAYERS ALPHA_LAYERS L_NAVSYM
 #define GAMING_LAYERS L_GAME1 L_GAME2
 #define RIGHT_HAND_LAYERS TYPING_LAYERS GAMING_LAYERS
 //}}}
@@ -67,20 +67,17 @@
 //}}}
 
 // Left thumb {{{
-#define G_SPC &kp SPC
-#define G_ESC &tm LSHFT ESC
-#define G_UTIL  &mo  L_UTIL
+#define G_SPC  &glt   L_NAVSYM    SPC
+#define G_ESC  &tm    LSHFT       ESC
 //}}}
 
 // Right thumb {{{
-#define G_RET   &glt L_RET    RET
+#define G_RET   &tm  LSHFT    RET
 #define G_BSPC  &glt L_NAVSYM BSPC
 //}}}
 
-// Left thumb {{{
-#define G_SPC  &glt   L_NAVSYM    SPC
-#define G_ESC  &glt   L_FNWM      ESC
-//}}}
+// Dual thumb combo layer
+#define G_DUAL &mo  L_DUAL
 
 //}}}
 
@@ -122,8 +119,8 @@
       // Intentionally out-of-the-way settings layer.
       COMBO(settings, &sl L_STNGS, 6 7 8 9, 35, TYPING_LAYERS)
 
-      // Both pinkies for smart caps
-      //COMBO(capsword, &caps_word, 10 19, 35, ALPHA_LAYERS)
+      // Both left thumb buttons
+      COMBO(dual_l, G_DUAL, 31 32, 35, ALPHA_LAYERS)
 
       // Use most comfortable combo for most frequent non-alpha chars:
       COMBO(tab, AS(TAB), 12 13, 25, TYPING_LAYERS)
@@ -144,9 +141,6 @@
 
       // Forward delete on easy-ish combo:
       COMBO(del, &kp DEL, 21 22, 25, RIGHT_HAND_LAYERS)
-
-      // Utility layer on left thumb combo:
-      COMBO(delfn, G_UTIL, 31 32, 35, TYPING_LAYERS)
     };
     //}}}
 
@@ -183,7 +177,7 @@
         label = "THUMB_MOD";
         #binding-cells = <2>;
         flavor = "hold-preferred";
-        tapping-term-ms = <150>;
+        tapping-term-ms = <135>;
         quick-tap-ms = <150>;
         //require-prior-idle-ms = <175>;
         bindings = <&kp>, <&kp>;
@@ -283,8 +277,8 @@
 			bindings = <
         AS(COMMA)    &kp HOME      &kp UP       &kp END          &kp PG_UP   /*& &*/     AS(EQUAL)           AS(N4)           AS(N5)             AS(N6)        AS(SQT)
         AS(DOT)      &kp LEFT      &kp DOWN     &kp RIGHT        &kp PG_DN   /*& &*/     AS(GRAVE)           AS(N1)           AS(N2)             AS(N3)        AS(N0)
-        &trans       &trans        &trans       AS(TAB)          &trans      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
-                                       &trans        &trans          &trans  /*& &*/ &trans         &kp DEL          &trans
+        &trans       &trans        &trans       &trans           &trans      /*& &*/     AS(MINUS)           AS(N7)           AS(N8)             AS(N9)        AS(BSLH)
+                                       &trans        &trans          &trans  /*& &*/ &trans         &trans            &trans
 			>;
 		};
 
@@ -297,11 +291,11 @@
 			>;
 		};
 
-		esc_layer {
+		dualthumb_layer {
 			bindings = <
-			  &kp K_LOCK   &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans       /*& &*/    &kp 13             &kp F4            &kp F5            &kp F6        &kp F11      
-        &kp CAPS     &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE   /*& &*/    &kp 14             &kp F1            &kp F2            &kp F3        &kp F10      
-        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP     /*& &*/    &kp 15             &kp F7            &kp F8            &kp F9        &kp F12      
+			  &kp CAPS     &trans        &kp C_BRI_DN  &kp C_BRI_UP     &trans       /*& &*/    &kp F13            &kp F4            &kp F5            &kp F6        &kp F11      
+        &caps_word   &trans        &kp K_VOL_DN  &kp K_VOL_UP     &kp K_MUTE   /*& &*/    &kp F14            &kp F1            &kp F2            &kp F3        &kp F10      
+        &trans       &trans        &kp K_PREV    &kp K_NEXT       &kp K_PP     /*& &*/    &kp F15            &kp F7            &kp F8            &kp F9        &kp F12      
                                        &trans        &trans          &trans    /*& &*/ &trans         &trans           &trans
 			>;
 		};

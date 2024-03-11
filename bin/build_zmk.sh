@@ -11,7 +11,7 @@ else
 	exit 1
 fi
 
-SDK_VERSION="0.16.1"
+SDK_VERSION="0.16.5-1"
 
 os=$(uname)
 if [[ "$os" == "Darwin" ]]; then
@@ -23,8 +23,10 @@ fi
 arch=$(uname -m)
 if [[ "$arch" == "arm64" ]]; then
 	SDK_ARCH="aarch64"
-elif [[ "$arch" != "x86_64" ]]; then
-	echo "Unknown architecture: $arch"
+elif [[ "$arch" == "x86_64" ]]; then
+	SDK_ARCH="x86_64"
+else
+	echo "Unsupported architecture: $arch"
 fi
 
 export ZEPHYR_TOOLCHAIN_VARIANT="zephyr"
@@ -67,9 +69,9 @@ set +e
 west build -c -p -d build/left -b "$BOARD" -- -DSHIELD=${KEYMAP}_left \
 	-DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
 cp "$ZMK_APP_DIR/build/left/zephyr/zmk.uf2" "../../../out/$KEYMAP.uf2"
-west build -c -p -d build/right -b "$BOARD" -- -DSHIELD=${KEYMAP}_right \
-	-DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
-cp "$ZMK_APP_DIR/build/right/zephyr/zmk.uf2" "../../../out/$KEYMAP.right.uf2"
+#west build -c -p -d build/right -b "$BOARD" -- -DSHIELD=${KEYMAP}_right \
+#	-DZMK_CONFIG="$REPO_DIR/firmware/zmk/$KEYMAP/config"
+#cp "$ZMK_APP_DIR/build/right/zephyr/zmk.uf2" "../../../out/$KEYMAP.right.uf2"
 STATUS="$?"
 set -e
 popd
