@@ -5,3 +5,5 @@ pushd deps/qmk_firmware
 git submodule update --init --recursive
 qmk setup
 popd
+
+python3 -m venv .venv

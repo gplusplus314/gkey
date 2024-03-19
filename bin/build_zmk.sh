@@ -5,7 +5,6 @@ KEYMAP="$1"
 if [ "$KEYMAP" == "vibraphone" ]; then
 	BOARD="nice_nano_v2"
 	# TODO: Default this better (assumes macOS)
-	MOUNT_POINT="/Volumes/NICENANO"
 else
 	echo "unsupported keymap"
 	exit 1
@@ -16,8 +15,11 @@ SDK_VERSION="0.16.5-1"
 os=$(uname)
 if [[ "$os" == "Darwin" ]]; then
 	SDK_OS_SUFFIX="_macos"
+elif [[ "$os" == "Linux" ]]; then
+	SDK_OS_SUFFIX="_linux"
 else
 	echo "Unsupported OS: $os"
+	exit 1
 fi
 
 arch=$(uname -m)
@@ -39,7 +41,9 @@ if [ "$ZEPHYR_BASE" == "" ]; then
 	mkdir -p ~/.local/opt
 	pushd ~/.local/opt
 
-	if [ ! -d "zephyr-sdk-$SDK_VERSION" ]; then
+	SDK_DIR="zephyr-sdk-$SDK_VERSION"
+
+	if [ ! -d "$SDK_DIR" ]; then
 		wget "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$SDK_VERSION/zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-$SDK_ARCH.tar.xz"
 		wget -O - "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v$SDK_VERSION/sha256.sum" | shasum --check --ignore-missing
 		tar xvf "zephyr-sdk-$SDK_VERSION$SDK_OS_SUFFIX-$SDK_ARCH.tar.xz"
@@ -55,6 +59,11 @@ if [ "$ZEPHYR_BASE" == "" ]; then
 	source ./zephyr/zephyr-env.sh
 fi
 popd
+
+if [ "$ZEPHYR_BASE" == "" ]; then
+	echo "ZEPHYR_BASE is not set"
+	exit 1
+fi
 
 pushd "firmware/zmk/$KEYMAP/config/boards/shields"
 rm "$KEYMAP" || echo ""
